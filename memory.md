@@ -35,7 +35,8 @@ Follow-up fixes applied after review:
 1. Desktop hero CTAs were centred in the 591px column — removed `justify-center`,
    added `desk:justify-start`. Now flush left with the copy at x=112. Mobile
    (full-width stacked) deliberately left as-is.
-2. Mobile header is `sticky top-0 z-50` (`desk:static`), and the open menu is
+2. Header is `sticky top-0 z-50` at every breakpoint so all content scrolls
+   underneath it (mobile first, desktop added the same session). The open menu is
    `absolute inset-x-0 top-full` so it overlays content instead of pushing it.
 3. Added `public/assets/icons/close.svg` — authored to match `menu.svg` exactly
    (24×24, `#F5F8FF` stroke, 1.5 width, round caps) because the Figma library
@@ -62,7 +63,6 @@ Verified: `next build`, `tsc --noEmit`, `eslint` all pass; rendered at 1440px an
 
 - Self-host Poppins via `next/font/local` to kill the Google Fonts dependency.
 - Scroll lock + dimmed backdrop when the mobile menu is open.
-- Sticky header on desktop too (currently mobile-only, as requested).
 - Language selector is a static button — needs real i18n wiring.
 - All CTA/nav hrefs are placeholder routes.
 

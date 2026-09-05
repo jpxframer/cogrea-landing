@@ -18,9 +18,8 @@ export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    // Pinned to the top on mobile so it sits over the page instead of scrolling
-    // away; the desktop header stays in normal flow.
-    <header className="sticky top-0 z-50 border-b border-solid border-neutral-200 bg-white px-4 py-6 desk:static desk:px-8">
+    // Pinned to the top at every breakpoint so the page scrolls underneath it.
+    <header className="sticky top-0 z-50 border-b border-solid border-neutral-200 bg-white px-4 py-6 desk:px-8">
       <div className="mx-auto flex w-full max-w-[1216px] items-center justify-between">
         {/* Logo + primary nav */}
         <div className="flex items-center gap-12">
