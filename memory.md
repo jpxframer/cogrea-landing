@@ -5,6 +5,48 @@ project back up. Project conventions live in [README.md](README.md).
 
 ---
 
+## 2026-09-05 23:20 WAT
+
+**Done: About section (desktop `18728:23029`, mobile `18728:23424`).**
+
+Added `src/components/about.tsx` (with local `FeatureCard` / `PillarCard`) and
+`src/components/ui/section-pill.tsx`; wired into `src/app/page.tsx`.
+
+New tokens in `globals.css`: `primary-300 #6275B9`, `primary-150 #CBDAFF`,
+`neutral-900 #111827`, `neutral-50 #F9FAFB`, the `bg-gradient-brand` utility
+(Figma Gradient 2), and type styles `type-h3-desktop/mobile`,
+`type-h5-desktop/mobile`, `type-p-xs`.
+
+New assets: `about-scene.png`, `icons/cogea-mark.svg`, `icons/chart-rose.svg`,
+`icons/microscope.svg`. **Reused `hero-wordmark.svg`** for the purple card's
+background wordmark — verified it is the same artwork scaled 2.2021x, so don't
+add a second copy.
+
+Also added `scroll-mt-[90px]` / `desk:scroll-mt-[93px]` to the section so the
+nav's `#about` anchor clears the sticky header. **Every future section with an
+`id` needs this too.**
+
+### Gotchas hit
+
+- `download_assets` on an icon node exported the whole page behind it (a
+  `#262628` rect + the `Landing`/`Desktop` ancestor frames clipped to a 24x24
+  viewBox). Fix: extract the `<g id="...">` subtree plus `<defs>` and drop the
+  unreferenced clipPath. Check any icon export for baked-in ancestor chrome
+  before committing it.
+- A bash heredoc broke on an apostrophe in the copy ("today's"). Use the Write
+  tool for files containing prose, not `cat <<'EOF'`.
+
+### Design discrepancies (flagged to user, implemented as designed)
+
+- Feature cards 1 and 4 have different titles per breakpoint: desktop says
+  "Predictive skill gap analyzer" / "Career Pathway Engine", mobile says
+  "AI-Powered Personalization" / "Global & Inclusive" — while sharing the same
+  descriptions. The desktop titles do not match their descriptions.
+- Mission and Vision body copy also differs per breakpoint.
+- Handled with responsive spans, same approach as the hero copy.
+
+---
+
 ## 2026-09-05 22:37 WAT
 
 **Done: landing page nav + hero (desktop & mobile), plus 3 follow-up fixes.**

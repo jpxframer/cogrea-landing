@@ -3,13 +3,17 @@
 @theme {
   /* ---- Color tokens (Figma: Cogrea library) ---- */
   --color-primary-500: #1b2353;
+  --color-primary-300: #6275b9;
+  --color-primary-150: #cbdaff;
   --color-primary-100: #f5f8ff;
   --color-secondary-500: #ff6a2b;
 
-  --color-neutral-100: #f3f4f6;
-  --color-neutral-200: #e5e7eb;
-  --color-neutral-500: #6b7280;
+  --color-neutral-900: #111827;
   --color-neutral-700: #374151;
+  --color-neutral-500: #6b7280;
+  --color-neutral-200: #e5e7eb;
+  --color-neutral-100: #f3f4f6;
+  --color-neutral-50: #f9fafb;
 
   --color-grey-200: #eaecf0;
 
@@ -49,6 +53,38 @@
   letter-spacing: -0.64px;
 }
 
+/* Heading/H3/Medium/Desktop */
+@utility type-h3-desktop {
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 40px;
+  letter-spacing: -0.64px;
+}
+
+/* Heading/H3/Medium/Mobile */
+@utility type-h3-mobile {
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 36px;
+  letter-spacing: -0.56px;
+}
+
+/* Heading/H5/Medium/Desktop */
+@utility type-h5-desktop {
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: -0.48px;
+}
+
+/* Heading/H5/Medium/Mobile */
+@utility type-h5-mobile {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 28px;
+  letter-spacing: -0.4px;
+}
+
 /* Paragraph/Medium/Regular */
 @utility type-p-md {
   font-weight: 400;
@@ -77,6 +113,13 @@
   line-height: 20px;
 }
 
+/* Paragraph/XSmall/Regular */
+@utility type-p-xs {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
+}
+
 /* Body/Bold — button labels */
 @utility type-body-bold {
   font-family: var(--font-body);
@@ -85,6 +128,18 @@
   line-height: 22px;
   letter-spacing: -0.408px;
   font-feature-settings: "case" 1;
+}
+
+/* Figma: Gradient/Gradient 2 — the blue tile behind the Mission/Vision icons */
+@utility bg-gradient-brand {
+  background-image: linear-gradient(
+    180deg,
+    rgb(0, 200, 255) 0%,
+    rgb(0, 122, 255) 17.308%,
+    rgb(0, 110, 229) 33.654%,
+    rgb(0, 122, 255) 74.519%,
+    rgb(0, 98, 204) 100%
+  );
 }
 
 html {
