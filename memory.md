@@ -5,6 +5,40 @@ project back up. Project conventions live in [README.md](README.md).
 
 ---
 
+## Where things stand — 2026-09-05 23:30 WAT (end of session)
+
+**Repo:** https://github.com/jpxframer/cogrea-landing (public, branch `main`).
+Clean and in sync at `f31851a`. Three commits, all authored by `jpxframer`.
+
+> The user asked that no AI attribution appear anywhere near this repo. Do NOT
+> add `Co-Authored-By`, "Generated with", or similar to commits or PRs.
+> `AGENTS.md` and `CLAUDE.md` (auto-written by `next dev`) are gitignored on
+> purpose — leave them untracked.
+
+**Deployed:** the user has it live on Vercel with a custom domain. The URL was
+never shared, so ask for it if you need to check the deployed build.
+
+**Built so far** — landing page, desktop + mobile:
+
+| Section | Desktop node | Mobile node |
+| --- | --- | --- |
+| Nav | `18728:22992` | `18728:23398` |
+| Hero | `18728:23017` | `18728:23412` |
+| About | `18728:23029` | `18728:23424` |
+
+**Next up:** the remaining landing-page sections, then the other 4 screens —
+`18728-10408`, `18728-10519`, `18728-10623`, `18728-10735`.
+Full landing frames: desktop `18728-22990`, mobile `18728-23394`.
+
+**Waiting on the user:** which feature-card titles are canonical (see the
+2026-09-05 23:20 entry). Everything else below is optional/offered work.
+
+**Housekeeping:** local dev server stopped, ports 3000 and 3100 free.
+`TaskStop` does not kill the Node process — kill the PID from
+`netstat -ano | grep :3000` as well.
+
+---
+
 ## 2026-09-05 23:20 WAT
 
 **Done: About section (desktop `18728:23029`, mobile `18728:23424`).**
@@ -110,6 +144,4 @@ Verified: `next build`, `tsc --noEmit`, `eslint` all pass; rendered at 1440px an
 
 ### Next up
 
-Remaining landing-page sections, then the other 4 screens:
-`18728-10408`, `18728-10519`, `18728-10623`, `18728-10735`.
-Full landing frames: desktop `18728-22990`, mobile `18728-23394`.
+Superseded — see "Where things stand" at the top of this file.
