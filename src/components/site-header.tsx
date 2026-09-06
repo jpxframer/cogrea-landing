@@ -7,11 +7,12 @@ import { useState } from "react";
 import { CtaButton } from "@/components/ui/cta-button";
 import { LanguageSelector } from "@/components/ui/language-selector";
 
+// Root-relative so they still resolve from /legal/* and any future sub-route.
 const navLinks = [
-  { label: "About", href: "#about" },
-  { label: "Features", href: "#features" },
-  { label: "How It Works", href: "#how-it-works" },
-  { label: "Get The App", href: "#get-the-app" },
+  { label: "About", href: "/#about" },
+  { label: "Features", href: "/#features" },
+  { label: "How It Works", href: "/#how-it-works" },
+  { label: "Get The App", href: "/#get-the-app" },
 ];
 
 export function SiteHeader() {

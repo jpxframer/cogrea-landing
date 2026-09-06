@@ -7,9 +7,9 @@ const linkColumns = [
   {
     title: "Menu",
     links: [
-      { label: "How It Works", href: "#how-it-works" },
-      { label: "Who We Help", href: "#audiences" },
-      { label: "Features", href: "#features" },
+      { label: "How It Works", href: "/#how-it-works" },
+      { label: "Who We Help", href: "/#audiences" },
+      { label: "Features", href: "/#features" },
     ],
   },
   {
