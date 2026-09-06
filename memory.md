@@ -8,9 +8,9 @@ project back up. Project conventions live in [README.md](README.md).
 ## Where things stand — 2026-09-06 14:10 WAT
 
 **Repo:** https://github.com/jpxframer/cogrea-landing (public, branch `main`).
-Pushed and in sync through "Add the Audiences section"; all commits authored by
-`jpxframer`. (Check `git status -sb` rather than trusting a hash written here —
-the previous session recorded a commit that had never actually been pushed.)
+Pushed and in sync through "Translate the site with routed locales"; all commits
+authored by `jpxframer`. (Check `git status -sb` rather than trusting a hash
+written here — an early session recorded a commit that had never been pushed.)
 
 > The user asked that no AI attribution appear anywhere near this repo. Do NOT
 > add `Co-Authored-By`, "Generated with", or similar to commits or PRs.
@@ -19,6 +19,18 @@ the previous session recorded a commit that had never actually been pushed.)
 
 **Deployed:** the user has it live on Vercel with a custom domain. The URL was
 never shared, so ask for it if you need to check the deployed build.
+**Worth checking on the live domain:** the `next.config.ts` rewrite that keeps
+`/` and `/legal/terms` working for English was only verified locally.
+
+**Picking back up — open items, highest value first:**
+1. Native-speaker review of the six-language copy in `src/i18n/messages/`
+   before promoting those languages (especially Arabic).
+2. An Arabic webfont — Poppins ships `latin` only, so Arabic falls back.
+3. The five Figma copy questions for the designer (08:05, 08:30, 09:15 and
+   11:40 entries).
+4. Placeholder routes that 404: `/contact`, `/sign-in`, `/get-started`,
+   `/download/google-play`, `/download/app-store` — now per-locale too.
+5. Self-host Poppins; revisit the 1216px desktop legal measure.
 
 **Built so far** — landing page, desktop + mobile:
 
