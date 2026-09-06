@@ -8,7 +8,9 @@ project back up. Project conventions live in [README.md](README.md).
 ## Where things stand — 2026-09-06 08:05 WAT
 
 **Repo:** https://github.com/jpxframer/cogrea-landing (public, branch `main`).
-Last synced at `41e117d`; all commits authored by `jpxframer`.
+Pushed and in sync through "Add the Audiences section"; all commits authored by
+`jpxframer`. (Check `git status -sb` rather than trusting a hash written here —
+the previous session recorded a commit that had never actually been pushed.)
 
 > The user asked that no AI attribution appear anywhere near this repo. Do NOT
 > add `Co-Authored-By`, "Generated with", or similar to commits or PRs.
