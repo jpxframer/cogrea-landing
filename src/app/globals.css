@@ -38,6 +38,22 @@
    Declared with @utility rather than @layer components so they accept
    responsive variants, e.g. `desk:type-h1-desktop`. */
 
+/* Display/Medium/Large */
+@utility type-display-lg {
+  font-weight: 500;
+  font-size: 52px;
+  line-height: 56px;
+  letter-spacing: -1.04px;
+}
+
+/* Display/Medium/Small */
+@utility type-display-sm {
+  font-weight: 500;
+  font-size: 44px;
+  line-height: 48px;
+  letter-spacing: -0.88px;
+}
+
 /* Heading/H1/Medium/Desktop */
 @utility type-h1-desktop {
   font-weight: 500;
@@ -182,6 +198,24 @@
     rgb(0, 122, 255) 74.519%,
     rgb(0, 98, 204) 100%
   );
+}
+
+/* Figma numbers the Privacy Policy list "(1)", "(2)"… rather than "1." */
+@utility list-parenthesised {
+  list-style: none;
+  padding-inline-start: 2.25rem;
+  counter-reset: cogrea-item;
+
+  & > li {
+    position: relative;
+    counter-increment: cogrea-item;
+  }
+
+  & > li::before {
+    content: "(" counter(cogrea-item) ")";
+    position: absolute;
+    inset-inline-start: -2.25rem;
+  }
 }
 
 html {

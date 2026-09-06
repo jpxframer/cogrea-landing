@@ -5,7 +5,7 @@ project back up. Project conventions live in [README.md](README.md).
 
 ---
 
-## Where things stand — 2026-09-06 10:45 WAT
+## Where things stand — 2026-09-06 11:40 WAT
 
 **Repo:** https://github.com/jpxframer/cogrea-landing (public, branch `main`).
 Pushed and in sync through "Add the Audiences section"; all commits authored by
@@ -34,8 +34,16 @@ never shared, so ask for it if you need to check the deployed build.
 | Get Started | `18728:23336` | `18728:23732` |
 | Footer | `18728:23364` | `18728:23760` |
 
-**Next up:** the landing page is COMPLETE. Remaining work is the other 4 screens —
-`18728-10408`, `18728-10519`, `18728-10623`, `18728-10735`.
+**Other routes:**
+
+| Route | Desktop node | Mobile node |
+| --- | --- | --- |
+| `/legal/terms` | `18728:10408` | `18728:10519` |
+| `/legal/privacy` | `18728:10623` | `18728:10735` |
+
+**Next up:** every Figma frame the user has pointed at is now built — the whole
+landing page plus both legal pages. Nothing is queued. The open items are the
+copy questions below and the loose ends in README's "Not in the designs".
 Full landing frames: desktop `18728-22990`, mobile `18728-23394`.
 
 **Waiting on the user:** confirm the copy calls in the 08:05, 08:30 and 09:15
@@ -45,6 +53,66 @@ anchors now resolve.**
 **Housekeeping:** local dev server stopped, ports 3000 and 3100 free.
 `TaskStop` does not kill the Node process — kill the PID from
 `netstat -ano | grep :3000` as well.
+
+---
+
+## 2026-09-06 11:40 WAT
+
+**Done: the Terms of Service and Privacy Policy pages — `18728:10408` /
+`18728:10519` and `18728:10623` / `18728:10735`.**
+
+These four Figma nodes are two *pages* at two breakpoints, not four screens.
+Each is header + legal body + Get Started + footer, so **the only new thing was
+the body**; `SiteHeader`, `GetStarted` and `SiteFooter` are reused whole.
+
+Added `src/components/legal-document.tsx` (layout + a `MailLink` helper) and
+`src/app/legal/terms/page.tsx` / `src/app/legal/privacy/page.tsx`, which hold
+their own copy. Both prerender static. Each has its own `metadata` export.
+
+New tokens: `type-display-lg` (52/56, -1.04) and `type-display-sm` (44/48,
+-0.88), plus a `list-parenthesised` utility that numbers list items "(1)",
+"(2)"… via a CSS counter and `::before` (NOT `::marker` — Safari only supports
+`::marker { content }` from 17).
+
+### Header and footer links had to become root-relative
+
+`SiteHeader` and `SiteFooter` used bare `#about`, `#features` etc. Those resolve
+against the current route, so on `/legal/terms` they would have dead-linked.
+They are now `/#about`, `/#features`, `/#how-it-works`, `/#get-the-app` and
+`/#audiences`. **Verified both directions:** clicking `/#audiences` from
+`/legal/terms` lands on `/` with the section at top 93 (the sticky-header
+offset), and all four header anchors still scroll correctly on `/` itself.
+**Any future sub-route needs this.**
+
+Verified: `tsc --noEmit`, `eslint`, `next build` pass; measured both pages at
+1440 and 375 (100/32 vs 50/16 padding, 48 vs 24px gaps, centred title on desktop
+and left-aligned on mobile, h1 52/56 and 44/48, h2 32/40 and 28/36, body 18/28
+and 16/24, 7 sections each, hanging-indent lists, "(n)" markers, mailto links in
+primary-500). Also confirmed the sticky header does not overlap the h1 at rest
+(100px clear on desktop, 50px on mobile).
+
+### Design discrepancies
+
+1. **The Privacy Policy's mobile frame repeats the Terms of Service intro
+   verbatim** instead of its own. Fourth copy-paste artifact of this kind in the
+   file (see also About/Audiences/Why Cogrea). The desktop frame's
+   Privacy-specific intro is used at both widths.
+2. Figma's desktop frames merge some bullets with the paragraph that follows
+   into a single text run — a fixed-width text-wrap artifact. Split at the "•"
+   markers; the mobile frames segment them correctly and were used to check.
+3. The Figma copy is full of doubled spaces from line wrapping ("you have
+   read,  understood"). Normalised to single spaces.
+4. The Privacy intro was missing its closing full stop. Added.
+
+### Deviations from Figma
+
+- Lists are real `<ul>`/`<ol>` with hanging indents. Figma draws them flat,
+  with literal "•" / "(1)" characters inside one text node, so wrapped lines run
+  back to the left margin. The numbering style is preserved.
+- The desktop body is a 1216px measure at 18px — about 150 characters per line,
+  well past comfortable reading. Implemented as designed; worth raising.
+- The mobile frames include an iOS status bar and home indicator. Those are
+  Figma device chrome, not page content, and were not implemented.
 
 ---
 

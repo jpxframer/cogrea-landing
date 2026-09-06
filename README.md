@@ -17,9 +17,23 @@ Figma file (`P36EvMfoHaBqid0zogZ2ZN`).
 | Get Started | `18728:23336` | `18728:23732` |
 | Footer | `18728:23364` | `18728:23760` |
 
-**The landing page is complete.** The other four screens are not built yet.
+**The landing page is complete.**
+
+## Other routes
+
+| Route | Desktop node | Mobile node |
+| --- | --- | --- |
+| `/legal/terms` | `18728:10408` | `18728:10519` |
+| `/legal/privacy` | `18728:10623` | `18728:10735` |
+
+Both wrap `SiteHeader`, `LegalDocument`, `GetStarted` and `SiteFooter`. Their
+copy lives in the page files; `legal-document.tsx` only handles layout.
 
 ### Anchors
+
+**Section links are root-relative** (`/#about`, not `#about`) because the header
+and footer also render on `/legal/*`. A bare `#about` would resolve against the
+sub-route and dead-link.
 
 The footer links to `#how-it-works`, `#audiences` ("Who We Help") and
 `#features`; its Legal links are placeholder routes.
@@ -42,7 +56,8 @@ Tokens live in [`src/app/globals.css`](src/app/globals.css) under Tailwind v4's
   tile on Mission/Vision and the "for Businesses" benefit icons)
 - **Type styles** — `.type-h1-desktop`, `.type-h2-desktop`, `.type-h2-mobile`,
   `.type-h3-desktop`, `.type-h3-mobile`, `.type-h5-desktop`, `.type-h5-mobile`,
-  `.type-h6-desktop`, `.type-p-lg`, `.type-p-lg-medium`, `.type-p-md`, `.type-p-md-medium`, `.type-p-sm`,
+  `.type-display-lg`, `.type-display-sm`, `.type-h6-desktop`, `.type-p-lg`,
+  `.type-p-lg-medium`, `.type-p-md`, `.type-p-md-medium`, `.type-p-sm`,
   `.type-p-sm-medium`, `.type-p-xs`, `.type-body-bold`
 
 ### Breakpoint
@@ -128,6 +143,14 @@ frames draw it identically, differing only in title size, which is the optional
   the App Store badge from its natural 120px to 134px. They use
   `object-contain` instead so the trademarked artwork keeps its aspect ratio.
 - Store badge links point at placeholder routes; the apps are not published.
+- The legal pages' bullet and numbered lists are real `<ul>`/`<ol>` elements
+  with hanging indents. Figma draws them flat, as literal "•" and "(1)"
+  characters inside one text node. The "(n)" numbering is preserved with a
+  counter so the markers still read as designed.
+- **The Privacy Policy's mobile frame repeats the Terms of Service intro.** The
+  desktop frame's Privacy-specific intro is used at both widths.
+- The desktop legal body is a 1216px measure at 18px, which is a very long line
+  (~150 characters). Implemented as designed, but worth revisiting.
 - The language selector renders as a button with no dropdown — it needs real
   i18n wiring.
 - All CTA/nav destinations are placeholder routes.
