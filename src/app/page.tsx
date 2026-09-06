@@ -4,6 +4,7 @@ import { Features } from "@/components/features";
 import { GetStarted } from "@/components/get-started";
 import { Hero } from "@/components/hero";
 import { HowItWorks } from "@/components/how-it-works";
+import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { WhyCogrea } from "@/components/why-cogrea";
 
@@ -20,6 +21,7 @@ export default function LandingPage() {
         <Features />
         <GetStarted />
       </main>
+      <SiteFooter />
     </>
   );
 }

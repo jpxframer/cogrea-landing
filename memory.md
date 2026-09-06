@@ -5,7 +5,7 @@ project back up. Project conventions live in [README.md](README.md).
 
 ---
 
-## Where things stand — 2026-09-06 10:05 WAT
+## Where things stand — 2026-09-06 10:45 WAT
 
 **Repo:** https://github.com/jpxframer/cogrea-landing (public, branch `main`).
 Pushed and in sync through "Add the Audiences section"; all commits authored by
@@ -32,8 +32,9 @@ never shared, so ask for it if you need to check the deployed build.
 | Why Choose Cogrea | `18728:23234` | `18728:23630` |
 | Features | `18728:23278` | `18728:23674` |
 | Get Started | `18728:23336` | `18728:23732` |
+| Footer | `18728:23364` | `18728:23760` |
 
-**Next up:** the remaining landing-page sections, then the other 4 screens —
+**Next up:** the landing page is COMPLETE. Remaining work is the other 4 screens —
 `18728-10408`, `18728-10519`, `18728-10623`, `18728-10735`.
 Full landing frames: desktop `18728-22990`, mobile `18728-23394`.
 
@@ -44,6 +45,57 @@ anchors now resolve.**
 **Housekeeping:** local dev server stopped, ports 3000 and 3100 free.
 `TaskStop` does not kill the Node process — kill the PID from
 `netstat -ano | grep :3000` as well.
+
+---
+
+## 2026-09-06 10:45 WAT
+
+**Done: the site footer (`18728:23364` / `18728:23760`). The landing page is
+now complete — every section from the Figma landing frames is built.**
+
+Added `src/components/site-footer.tsx`, rendered after `</main>` in
+`page.tsx` (it is a `<footer>`, so it sits outside `<main>`). Brand block with
+logo, tagline and store badges; two link columns; a full-width oversized
+wordmark below a `neutral-300` divider.
+
+**Zero new assets.** Verified by md5 / path-coordinate comparison:
+- the 100x28 logo is byte-identical to `cogrea-logo.svg`
+- the App Store badge is byte-identical to `badge-app-store.svg`
+- the Google Play badge differs **only in Figma's internal filter/gradient id
+  suffixes** (`_0_101` vs `_0_79`) — same artwork, so the existing file is used
+- the oversized wordmark is the same artwork as `hero-wordmark.svg`: its
+  viewBoxes differ (1216x340 desktop, 343x96.04 mobile, 564x158 existing) but
+  every path coordinate normalises to the same fraction of the viewBox
+  (0.89059, 0.83184). **This is now the fourth reuse of that file.**
+
+**Extracted `src/components/ui/store-badges.tsx`.** The badge block was
+identical in Get Started and the footer; the only difference is label alignment,
+so the component takes `className` and `labelClassName`. Get Started passes its
+absolute positioning through `className`. Regression-checked afterwards: still
+273x80, absolute, top 28px, centred with 0px delta.
+
+New tokens: `--color-neutral-300 #d1d5db` and `type-p-lg` (18/28 regular —
+the project already had `type-p-lg-medium`).
+
+Verified: `tsc --noEmit`, `eslint`, `next build` pass; measured at 1440 and 375
+(100/32 vs 50/16 padding, 24px wrap gap, top row row+space-between vs
+column+48px, 1px #D1D5DB border with 48px pb, 592px brand block, 20px/16px
+inner gaps, 273x80 badges, 14px column gap with 4px row gap, 20/28 headings,
+16/24 w500 links with 8px padding, wordmark aspect 3.5715 against a 3.5714
+target). All footer anchors resolve.
+
+### Deviation from Figma
+
+- Figma indents the "Menu" and "Legal" headings with **two literal leading
+  spaces** to line them up with the links' 8px padding. Implemented as `px-2`
+  instead, which aligns exactly — asserted in the browser (heading left ==
+  link left at both breakpoints). Do not copy the whitespace hack.
+- Figma marks the Legal column `items-center` while Menu is `items-start`, but
+  both render left-aligned because the link rows are `w-full` with
+  shrink-to-fit text. Implemented as two plain left-aligned lists.
+- Desktop uses a literal `gap: 338px` between the brand block and the link
+  columns; implemented as `justify-between`, which is equivalent at 1216 and
+  does not break at other widths.
 
 ---
 

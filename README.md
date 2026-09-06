@@ -15,10 +15,14 @@ Figma file (`P36EvMfoHaBqid0zogZ2ZN`).
 | Why Choose Cogrea | `18728:23234` | `18728:23630` |
 | Features | `18728:23278` | `18728:23674` |
 | Get Started | `18728:23336` | `18728:23732` |
+| Footer | `18728:23364` | `18728:23760` |
 
-Remaining landing-page sections and the other four screens are not built yet.
+**The landing page is complete.** The other four screens are not built yet.
 
 ### Anchors
+
+The footer links to `#how-it-works`, `#audiences` ("Who We Help") and
+`#features`; its Legal links are placeholder routes.
 
 All four nav anchors resolve: `#about`, `#features`, `#how-it-works` and
 `#get-the-app`. Audiences is `#audiences` — it has no nav link. Every section with an `id` needs `scroll-mt-[90px] desk:scroll-mt-[93px]`
@@ -30,14 +34,15 @@ Tokens live in [`src/app/globals.css`](src/app/globals.css) under Tailwind v4's
 `@theme` block, named after the Figma styles:
 
 - **Colors** — `primary-500 #1B2353`, `primary-100 #F5F8FF`,
-  `secondary-500 #FF6A2B`, `neutral-100/200/500/700`, `grey-200 #EAECF0`
+  `secondary-500 #FF6A2B`, `neutral-50/100/200/300/500/700/900`,
+  `grey-200 #EAECF0`
 - **Effects** — `shadow-ds-sm` (Drop shadow/Small), `shadow-ds-md` (Drop shadow/Medium)
 - **Gradients** — `bg-gradient-accent` (Gradient 1, the warm tile on the
   "For Individuals" benefit icons), `bg-gradient-brand` (Gradient 2, the blue
   tile on Mission/Vision and the "for Businesses" benefit icons)
 - **Type styles** — `.type-h1-desktop`, `.type-h2-desktop`, `.type-h2-mobile`,
   `.type-h3-desktop`, `.type-h3-mobile`, `.type-h5-desktop`, `.type-h5-mobile`,
-  `.type-h6-desktop`, `.type-p-lg-medium`, `.type-p-md`, `.type-p-md-medium`, `.type-p-sm`,
+  `.type-h6-desktop`, `.type-p-lg`, `.type-p-lg-medium`, `.type-p-md`, `.type-p-md-medium`, `.type-p-sm`,
   `.type-p-sm-medium`, `.type-p-xs`, `.type-body-bold`
 
 ### Breakpoint
@@ -84,6 +89,10 @@ is a plain joiner with no tailwind-merge, so equal-specificity utilities are
 resolved by stylesheet order, not argument order. Every caller now states its
 own alignment (`self-start`, `self-start desk:self-center`, or nothing when the
 parent already centres).
+
+`ui/store-badges.tsx` is "Download The Mobile App" above the two store badges,
+shared by the Get Started section and the footer — they differ only in label
+alignment.
 
 `ui/feature-card.tsx` is the pale card with a Cogrea-mark tile above a title and
 description. About, Why Choose Cogrea and Features all use it — the three Figma
