@@ -93,6 +93,14 @@
   letter-spacing: -0.4px;
 }
 
+/* Heading/H6/Medium/Desktop — Features uses it at both breakpoints */
+@utility type-h6-desktop {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 28px;
+  letter-spacing: -0.4px;
+}
+
 /* Paragraph/Large/Medium */
 @utility type-p-lg-medium {
   font-weight: 500;

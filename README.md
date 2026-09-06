@@ -12,8 +12,17 @@ Figma file (`P36EvMfoHaBqid0zogZ2ZN`).
 | About     | `18728:23029` | `18728:23424` |
 | Audiences | `18728:23092` | `18728:23487` |
 | How It Works | `18728:23186` | `18728:23581` |
+| Why Choose Cogrea | `18728:23234` | `18728:23630` |
+| Features | `18728:23278` | `18728:23674` |
 
 Remaining landing-page sections and the other four screens are not built yet.
+
+### Anchors
+
+`#about`, `#features` and `#how-it-works` resolve; `#get-the-app` is still
+dead because that section is not built. Audiences is `#audiences` — it has no
+nav link. Every section with an `id` needs `scroll-mt-[90px] desk:scroll-mt-[93px]`
+so the anchor clears the sticky header.
 
 ## Design system
 
@@ -28,7 +37,7 @@ Tokens live in [`src/app/globals.css`](src/app/globals.css) under Tailwind v4's
   tile on Mission/Vision and the "for Businesses" benefit icons)
 - **Type styles** — `.type-h1-desktop`, `.type-h2-desktop`, `.type-h2-mobile`,
   `.type-h3-desktop`, `.type-h3-mobile`, `.type-h5-desktop`, `.type-h5-mobile`,
-  `.type-p-lg-medium`, `.type-p-md`, `.type-p-md-medium`, `.type-p-sm`,
+  `.type-h6-desktop`, `.type-p-lg-medium`, `.type-p-md`, `.type-p-md-medium`, `.type-p-sm`,
   `.type-p-sm-medium`, `.type-p-xs`, `.type-body-bold`
 
 ### Breakpoint
@@ -67,6 +76,13 @@ How It Works adds no new imagery: its phone render is byte-identical to
 stroked `#111827` instead of `#F5F8FF`. Icons render through `next/image`, so a
 recolour needs its own file rather than `currentColor`.
 
+## Shared components
+
+`ui/feature-card.tsx` is the pale card with a Cogrea-mark tile above a title and
+description. About, Why Choose Cogrea and Features all use it — the three Figma
+frames draw it identically, differing only in title size, which is the optional
+`titleClassName` prop.
+
 ## Not in the designs
 
 - The mobile hamburger has no open state in Figma. A minimal expanding panel
@@ -86,6 +102,12 @@ recolour needs its own file rather than `currentColor`.
   used. Its preview panel also differs — desktop shows only the step
   description as a 36px heading, mobile shows title + description. The mobile
   treatment is used at both widths. See [memory.md](memory.md).
+- **Why Choose Cogrea's mobile frame repeats the About feature cards verbatim**
+  rather than its own. The desktop set (Actionable framework / Better &
+  Innovative Approach / Lifelong Career Support / Growth & Success) is used at
+  both widths.
+- Features card 1 has an 18px title where the other five are 20px. Both Figma
+  frames agree, so it is implemented as designed.
 - The language selector renders as a button with no dropdown — it needs real
   i18n wiring.
 - All CTA/nav destinations are placeholder routes.

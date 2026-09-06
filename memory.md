@@ -5,7 +5,7 @@ project back up. Project conventions live in [README.md](README.md).
 
 ---
 
-## Where things stand — 2026-09-06 08:30 WAT
+## Where things stand — 2026-09-06 09:15 WAT
 
 **Repo:** https://github.com/jpxframer/cogrea-landing (public, branch `main`).
 Pushed and in sync through "Add the Audiences section"; all commits authored by
@@ -29,18 +29,78 @@ never shared, so ask for it if you need to check the deployed build.
 | About | `18728:23029` | `18728:23424` |
 | Audiences | `18728:23092` | `18728:23487` |
 | How It Works | `18728:23186` | `18728:23581` |
+| Why Choose Cogrea | `18728:23234` | `18728:23630` |
+| Features | `18728:23278` | `18728:23674` |
 
 **Next up:** the remaining landing-page sections, then the other 4 screens —
 `18728-10408`, `18728-10519`, `18728-10623`, `18728-10735`.
 Full landing frames: desktop `18728-22990`, mobile `18728-23394`.
 
-**Waiting on the user:** confirm the Audiences copy calls (2026-09-06 08:05
-entry), the How It Works copy calls (2026-09-06 08:30 entry), and whether
-`#features` is the right anchor for Audiences.
+**Waiting on the user:** confirm the copy calls in the 08:05, 08:30 and 09:15
+entries. The `#features` anchor question is settled — see 09:15.
 
 **Housekeeping:** local dev server stopped, ports 3000 and 3100 free.
 `TaskStop` does not kill the Node process — kill the PID from
 `netstat -ano | grep :3000` as well.
+
+---
+
+## 2026-09-06 09:15 WAT
+
+**Done: two sections — Why Choose Cogrea (`18728:23234` / `18728:23630`) and
+Features (`18728:23278` / `18728:23674`).**
+
+Added `src/components/why-cogrea.tsx` and `src/components/features.tsx`, wired
+into `page.tsx` after `<HowItWorks />`. Section order follows Figma node order:
+Hero, About, Audiences, How It Works, Why Cogrea, Features.
+
+**`#features` belonged to the Features section, not Audiences.** The Features
+pill literally reads "Features". Audiences is now `id="audiences"` (no nav
+link). `#about`, `#features` and `#how-it-works` all resolve; only
+`#get-the-app` is still dead. Asserted in the browser, not just by eye.
+
+**Extracted `src/components/ui/feature-card.tsx`.** About's local `FeatureCard`
+was byte-for-byte what both new sections needed, so it moved to `ui/` and
+`about.tsx` now imports it. The only variation is title size, exposed as an
+optional `titleClassName`. If a fourth section wants this card, reuse it.
+
+New token: `type-h6-desktop` (20/28, -0.4). Despite the Figma style name,
+Features applies it at **both** breakpoints.
+
+**Asset reuse — only one new file.** Verified by md5:
+- Features' wordmark is the same artwork as `hero-wordmark.svg`, uniformly
+  scaled (564x158 -> 428x120, factor 1.3172). Reused, as How It Works does.
+- **The 24px "Cogea 3" export is NOT usable** — Figma emits it as separate
+  layers and the single-node export is just the bare blue gradient circle with
+  no compass glyph. `icons/cogea-mark.svg` (assembled in the first session) is
+  the complete mark. Always reuse it rather than re-exporting.
+- New: `features-app.png` (2770x1928, 1.37MB) — the web-app render. In line
+  with the other PNGs; `next/image` resizes it on serve.
+
+Verified: `tsc --noEmit`, `eslint`, `next build` pass; rendered at 1440 and 375
+and measured with `getComputedStyle` (Why Cogrea: 32px row gap, 592px columns,
+16px between card rows and 32px within, 280x136 and 343x136 cards, CTA padding
+12/32; Features: 48px vs 24px wrap gap, header centred at 800 on desktop with
+pill centre == h2 centre, three 384px columns ordered 1/2/3 around a 384x440
+render, 343x391 on mobile, wordmark 428x120, app render 816x568).
+
+**`CtaButton` needed no new props** — its default `contentClassName` of
+`px-8 py-3` is already this CTA's px-32/py-12. It does need `className="self-start"`
+in a `flex-col`, or it stretches full width.
+
+### Design discrepancies
+
+1. **Why Cogrea's mobile frame repeats the About feature cards verbatim**
+   (AI-Powered Personalization / Verified Talent Pool / Goal Tracking / Global &
+   Inclusive) instead of its own. Same class of copy-paste artifact as the
+   Audiences mobile business list. The desktop set is used at both widths:
+   Actionable framework / Better & Innovative Approach / Lifelong Career
+   Support / Growth & Success. **Flagged, not implemented as designed.**
+2. Features card 1 ("24/7 Career Coaching") has an 18px title where the other
+   five are 20px. **Both frames agree**, so implemented as designed — but it
+   looks unintentional.
+3. Why Cogrea's caption is 12px on mobile and 14px on desktop. A real
+   responsive difference, implemented as designed.
 
 ---
 

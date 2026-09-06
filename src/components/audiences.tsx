@@ -144,7 +144,7 @@ export function Audiences() {
     // scroll-mt clears the sticky header when the nav jumps to this anchor
     // (header measures 90px on mobile, 93px on desktop).
     <section
-      id="features"
+      id="audiences"
       className="scroll-mt-[90px] px-4 py-[50px] desk:scroll-mt-[93px] desk:px-8 desk:py-[100px]"
     >
       <div className="mx-auto flex w-full max-w-[420px] flex-col gap-16 desk:max-w-[1216px]">
