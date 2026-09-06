@@ -3,10 +3,15 @@ import Image from "next/image";
 import { CtaButton } from "@/components/ui/cta-button";
 import { SectionPill } from "@/components/ui/section-pill";
 import { StoreBadges } from "@/components/ui/store-badges";
+import { localePath, type LocaleSegment } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/dictionaries";
 import { cn } from "@/lib/cn";
 
-const INTRO =
-  "Start today with AI-powered guidance built for individuals and businesses alike.";
+type GetStartedProps = {
+  lang: LocaleSegment;
+  dict: Dictionary["getStarted"];
+  badges: Dictionary["storeBadges"];
+};
 
 /** The white, hairline-bordered panel both halves of this section sit in. */
 function Panel({ children, className }: { children: React.ReactNode; className?: string }) {
@@ -22,7 +27,7 @@ function Panel({ children, className }: { children: React.ReactNode; className?:
   );
 }
 
-export function GetStarted() {
+export function GetStarted({ lang, dict, badges }: GetStartedProps) {
   return (
     // scroll-mt clears the sticky header when the nav jumps to this anchor
     // (header measures 90px on mobile, 93px on desktop).
@@ -33,12 +38,10 @@ export function GetStarted() {
       <div className="mx-auto flex w-full max-w-[420px] flex-col gap-6 desk:max-w-[1216px] desk:gap-12">
         {/* Figma centres the pill at both widths but only centres the copy on desktop. */}
         <div className="flex w-full flex-col items-center gap-6 desk:mx-auto desk:max-w-[800px] desk:text-center">
-          <SectionPill>Get Started</SectionPill>
+          <SectionPill>{dict.pill}</SectionPill>
           <div className="flex w-full flex-col gap-2">
-            <h2 className="type-h2-mobile text-neutral-900 desk:type-h2-desktop">
-              Your growth and success are one click away.
-            </h2>
-            <p className="type-p-md text-neutral-500">{INTRO}</p>
+            <h2 className="type-h2-mobile text-neutral-900 desk:type-h2-desktop">{dict.heading}</h2>
+            <p className="type-p-md text-neutral-500">{dict.intro}</p>
           </div>
         </div>
 
@@ -48,7 +51,7 @@ export function GetStarted() {
               <div className="relative aspect-[2746/1856] w-full">
                 <Image
                   src="/assets/get-started-app.png"
-                  alt="A laptop showing the Cogrea welcome screen for employers"
+                  alt={dict.laptopAlt}
                   fill
                   sizes="(min-width: 1200px) 560px, calc(100vw - 64px)"
                   className="object-cover"
@@ -58,17 +61,20 @@ export function GetStarted() {
 
             <Panel className="p-4">
               <div className="flex w-full flex-col gap-6">
-                <p className="type-p-md w-full text-neutral-500">{INTRO}</p>
+                <p className="type-p-md w-full text-neutral-500">{dict.intro}</p>
                 <div className="flex flex-col gap-4 desk:flex-row desk:items-center">
-                  <CtaButton href="/get-started?for=career" className="w-full desk:w-auto">
-                    I’m Here for My Career
+                  <CtaButton
+                    href={localePath(lang, "/get-started?for=career")}
+                    className="w-full desk:w-auto"
+                  >
+                    {dict.career}
                   </CtaButton>
                   <CtaButton
-                    href="/get-started?for=business"
+                    href={localePath(lang, "/get-started?for=business")}
                     variant="secondary"
                     className="w-full desk:w-auto"
                   >
-                    I’m Here for My Business
+                    {dict.business}
                   </CtaButton>
                 </div>
               </div>
@@ -80,7 +86,7 @@ export function GetStarted() {
             <div className="pointer-events-none absolute left-[52px] top-[132px] h-[944px] w-[481px]">
               <Image
                 src="/assets/about-scene.png"
-                alt="The Cogrea app framed as a compass — the GPS for your career"
+                alt={dict.phoneAlt}
                 fill
                 sizes="481px"
                 className="object-cover"
@@ -88,6 +94,7 @@ export function GetStarted() {
             </div>
 
             <StoreBadges
+              dict={badges}
               className="absolute left-1/2 top-[28px] -translate-x-1/2 items-center"
               labelClassName="text-center"
             />

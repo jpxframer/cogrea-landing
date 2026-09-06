@@ -5,7 +5,7 @@ project back up. Project conventions live in [README.md](README.md).
 
 ---
 
-## Where things stand — 2026-09-06 12:35 WAT
+## Where things stand — 2026-09-06 14:10 WAT
 
 **Repo:** https://github.com/jpxframer/cogrea-landing (public, branch `main`).
 Pushed and in sync through "Add the Audiences section"; all commits authored by
@@ -53,6 +53,69 @@ anchors now resolve.**
 **Housekeeping:** local dev server stopped, ports 3000 and 3100 free.
 `TaskStop` does not kill the Node process — kill the PID from
 `netstat -ano | grep :3000` as well.
+
+---
+
+## 2026-09-06 14:10 WAT
+
+**Done: the marketing site is genuinely translated, on routed locales.**
+
+The user asked why content was not translating — it was the agreed scope of the
+previous session (picker only). They then asked for the full thing, choosing:
+- **routed locales** over client-side swapping, for SEO
+- **legal pages left in English**, for browser translation to handle
+- **no persistence** — a returning visitor starts on English again
+
+### Architecture
+
+Everything moved under `src/app/[lang]/`, which is now the root layout (it
+renders `<html>`). `generateStaticParams` + `dynamicParams = false` prerenders
+**18 pages** (6 locales x 3 routes). `<html lang>`/`dir` are set server-side, so
+Arabic is RTL from first paint and indexable — no flash, no client context.
+
+**English is unprefixed** so the already-live URLs keep working. `next.config.ts`
+rewrites `/` -> `/en` and `/legal/:path*` -> `/en/legal/:path*`. Other locales are
+prefixed (`/fr`, `/fr/legal/terms`). `hreflang` + canonical emitted per page.
+
+**The old `src/lib/locales.ts` and `locale-provider.tsx` were deleted** —
+localStorage, `useSyncExternalStore` and the whole client state layer are gone.
+The URL is the only source of truth now. The picker calls `router.push` to the
+same path in the new locale (`stripLocale` + `localePath`).
+
+### Copy
+
+`src/i18n/messages/{en,fr,de,es,it,ar}.ts`. **`en.ts` exports the `Dictionary`
+type and every other locale is typed against it**, so a missing key is a build
+error. Server components call `getDictionary(lang)` and pass slices as props —
+no client i18n context.
+
+Verified with a script that all six have **identical key shape AND array
+lengths (92 leaves each)** — TypeScript alone would not catch a short array.
+
+### Next 16 gotchas
+
+- The generated route validator types params as `Promise<{ lang: string }>`,
+  NOT your own union. Use the global `PageProps<"/[lang]">` /
+  `LayoutProps<"/[lang]">` helpers and narrow with a `toSegment()` helper;
+  annotating params with `LocaleSegment` fails the build.
+- Stale `.next/types/validator.ts` from the old routes breaks `tsc` after
+  moving files — `rm -rf .next` before rebuilding.
+- Middleware is called **Proxy** in Next 16. Not needed here.
+
+Verified in the browser: all 9 sampled routes 200 with correct lang/dir/nav/h1;
+translated content present in all six; switching from `/` lands on `/de`;
+switching on `/legal/terms` lands on `/fr/legal/terms` (**keeps the page**);
+switching back to English drops the prefix; a fresh browser context starts on
+English with **0 localStorage keys**.
+
+### Flagged to the user
+
+- Poppins loads the `latin` subset only, so Arabic falls back to a system font.
+  A dedicated Arabic face would render it better.
+- Picker shows English language names ("German"), per the Figma design.
+  Endonyms ("Deutsch") are usually better in a switcher.
+- Marketing copy was translated by me and reads naturally, but a native
+  speaker should review before launch.
 
 ---
 

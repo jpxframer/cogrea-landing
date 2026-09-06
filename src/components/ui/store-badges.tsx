@@ -1,25 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import type { Dictionary } from "@/i18n/dictionaries";
 import { cn } from "@/lib/cn";
 
-// The apps are not published yet, so these are placeholder routes.
-const badges = [
-  {
-    href: "/download/google-play",
-    src: "/assets/badge-google-play.svg",
-    alt: "Get it on Google Play",
-    width: 135,
-  },
-  {
-    href: "/download/app-store",
-    src: "/assets/badge-app-store.svg",
-    alt: "Download on the App Store",
-    width: 120,
-  },
-];
-
 type StoreBadgesProps = {
+  dict: Dictionary["storeBadges"];
   className?: string;
   labelClassName?: string;
 };
@@ -28,12 +14,26 @@ type StoreBadgesProps = {
  * "Download The Mobile App" above the two store badges. Shared by the Get
  * Started section and the footer, which differ only in label alignment.
  */
-export function StoreBadges({ className, labelClassName }: StoreBadgesProps) {
+export function StoreBadges({ dict, className, labelClassName }: StoreBadgesProps) {
+  // The apps are not published yet, so these are placeholder routes.
+  const badges = [
+    {
+      href: "/download/google-play",
+      src: "/assets/badge-google-play.svg",
+      alt: dict.googlePlay,
+      width: 135,
+    },
+    {
+      href: "/download/app-store",
+      src: "/assets/badge-app-store.svg",
+      alt: dict.appStore,
+      width: 120,
+    },
+  ];
+
   return (
     <div className={cn("flex w-[273px] flex-col gap-4", className)}>
-      <p className={cn("type-p-md w-full text-neutral-500", labelClassName)}>
-        Download The Mobile App
-      </p>
+      <p className={cn("type-p-md w-full text-neutral-500", labelClassName)}>{dict.label}</p>
       <div className="flex w-full items-start gap-1.5">
         {badges.map((badge) => (
           <Link

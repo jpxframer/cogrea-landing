@@ -4,6 +4,8 @@ import { GetStarted } from "@/components/get-started";
 import { LegalDocument, MailLink, type LegalSection } from "@/components/legal-document";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { toSegment } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 
 export const metadata: Metadata = {
   title: "Privacy Policy — Cogrea",
@@ -175,13 +177,21 @@ const sections: LegalSection[] = [
   },
 ];
 
-export default function PrivacyPolicyPage() {
+/**
+ * The chrome is localised but the document itself stays in English on purpose —
+ * translated legal text needs professional review. Browser translation handles
+ * the body for readers who need it.
+ */
+export default async function PrivacyPolicyPage({ params }: PageProps<"/[lang]/legal/privacy">) {
+  const lang = toSegment((await params).lang);
+  const dict = getDictionary(lang);
+
   return (
     <>
-      <SiteHeader />
+      <SiteHeader lang={lang} dict={dict} />
       <LegalDocument title="Privacy Policy" intro={INTRO} sections={sections} />
-      <GetStarted />
-      <SiteFooter />
+      <GetStarted lang={lang} dict={dict.getStarted} badges={dict.storeBadges} />
+      <SiteFooter lang={lang} dict={dict.footer} badges={dict.storeBadges} />
     </>
   );
 }

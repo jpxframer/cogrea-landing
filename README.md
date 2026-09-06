@@ -29,23 +29,39 @@ Figma file (`P36EvMfoHaBqid0zogZ2ZN`).
 Both wrap `SiteHeader`, `LegalDocument`, `GetStarted` and `SiteFooter`. Their
 copy lives in the page files; `legal-document.tsx` only handles layout.
 
-## Language picker
+## Languages
 
-The nav's language control opens a modal (Figma `18740:1539` / `18740:2024`)
-listing six locales: English (US), French, German, Spanish, Italian, Arabic.
+Six locales: English (US), French, German, Spanish, Italian, Arabic. **The
+locale lives in the URL** — every route is prerendered per language.
 
-- Locales are defined once in [`src/lib/locales.ts`](src/lib/locales.ts).
-- `locale-provider.tsx` reads and writes `localStorage` through
-  `useSyncExternalStore`, so the choice survives reloads and route changes and
-  stays in step across tabs. It also mirrors the choice onto `<html lang>` and
-  `<html dir>`, so **Arabic flips the whole page to RTL**.
-- The dialog is a native `<dialog>`, which supplies the focus trap, Esc
-  handling and inert background. Picking a row is provisional; **Continue**
-  commits it, Esc or a backdrop click discards it.
-- **Nothing is translated yet.** All copy stays English whatever is selected —
-  the wiring is in place for translations to drop in later. Arabic is where
-  this shows most: the layout mirrors correctly but the English text inside it
-  reads oddly until Arabic copy exists.
+```
+/            /fr            /de            /es      /it      /ar
+/legal/terms /fr/legal/terms  …
+```
+
+English is served **unprefixed**, so the URLs that were already live keep
+working; a rewrite in `next.config.ts` maps `/` to `/en` internally.
+
+- Locales: [`src/i18n/config.ts`](src/i18n/config.ts). Copy:
+  [`src/i18n/messages/`](src/i18n/messages) — one file per language.
+- **`en.ts` is the source of truth for the shape.** Every other locale is typed
+  `: Dictionary`, so a missing key fails the build.
+- Server components read the dictionary via `getDictionary(lang)` and pass
+  slices down as props; there is no client-side i18n context.
+- `<html lang>` and `<html dir>` are set server-side per route, so **Arabic
+  renders RTL from the first paint** — no flash, and it is indexable.
+- `hreflang` alternates and a canonical are emitted for every page.
+- The picker (Figma `18740:1539` / `18740:2024`) is a native `<dialog>`, which
+  supplies the focus trap, Esc handling and inert background. Choosing a
+  language **navigates** to the same page in that locale. Nothing is stored, so
+  a returning visitor starts on English again — deliberate.
+
+### What is not translated
+
+The Terms of Service and Privacy Policy **bodies stay in English** in every
+locale; only the surrounding chrome is translated. Translated legal text needs
+professional review, so browser translation is left to handle it. The pages are
+still reachable at `/fr/legal/terms` and so on.
 
 ## Third-party assets
 
@@ -180,8 +196,11 @@ frames draw it identically, differing only in title size, which is the optional
   desktop frame's Privacy-specific intro is used at both widths.
 - The desktop legal body is a 1216px measure at 18px, which is a very long line
   (~150 characters). Implemented as designed, but worth revisiting.
-- The language selector opens and remembers a choice, but no copy is
-  translated yet. See "Language picker" above.
+- Poppins is loaded with the `latin` subset only, so Arabic falls back to a
+  system font. A dedicated Arabic face would render it better.
+- Language names in the picker are shown in English ("German", not "Deutsch").
+  Endonyms are usually better in a language switcher; the Figma design uses
+  English names.
 - All CTA/nav destinations are placeholder routes.
 
 ## Next.js 16 notes

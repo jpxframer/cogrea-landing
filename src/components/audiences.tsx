@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { SectionPill } from "@/components/ui/section-pill";
+import type { Dictionary } from "@/i18n/dictionaries";
 import { cn } from "@/lib/cn";
 
 type Audience = {
@@ -16,49 +17,29 @@ type Audience = {
   reverse?: boolean;
 };
 
-const INTRO =
-  "Whether you’re just starting out, switching paths, or leveling up, Cogrea gives you " +
-  "personalized career support every step of the way.";
+type AudiencesProps = { dict: Dictionary["audiences"] };
 
-const audiences: Audience[] = [
-  {
-    pill: { icon: "/assets/icons/profile.svg", label: "For Individuals" },
-    tileClassName: "bg-gradient-accent",
-    heading: "Build the Career You Deserve",
-    intro: INTRO,
-    benefits: [
-      "Find and close skill gaps",
-      "Discover high-paying skills",
-      "Get matched with jobs",
-      "24/7 AI + human career coach",
-      "Only pay for what you need",
-      "Burnout recovery & mental health",
-    ],
-    scene: {
-      src: "/assets/individuals-scene.jpg",
-      alt: "A laptop, notepad, phone and mug of coffee on a wooden desk",
+function buildAudiences(dict: Dictionary["audiences"]): Audience[] {
+  return [
+    {
+      pill: { icon: "/assets/icons/profile.svg", label: dict.individuals.pill },
+      tileClassName: "bg-gradient-accent",
+      heading: dict.individuals.heading,
+      intro: dict.intro,
+      benefits: dict.individuals.benefits,
+      scene: { src: "/assets/individuals-scene.jpg", alt: dict.individuals.sceneAlt },
     },
-  },
-  {
-    pill: { icon: "/assets/icons/briefcase.svg", label: "for Businesses" },
-    tileClassName: "bg-gradient-brand",
-    heading: "Hire Smarter. Grow Faster.",
-    intro: INTRO,
-    benefits: [
-      "Hire verified talent",
-      "Track and grow your workforce",
-      "Retain top performers",
-      "HR + business support",
-      "All-in-one platform",
-      "Operations guidance",
-    ],
-    scene: {
-      src: "/assets/businesses-scene.jpg",
-      alt: "A laptop displaying a workforce analytics dashboard",
+    {
+      pill: { icon: "/assets/icons/briefcase.svg", label: dict.businesses.pill },
+      tileClassName: "bg-gradient-brand",
+      heading: dict.businesses.heading,
+      intro: dict.intro,
+      benefits: dict.businesses.benefits,
+      scene: { src: "/assets/businesses-scene.jpg", alt: dict.businesses.sceneAlt },
+      reverse: true,
     },
-    reverse: true,
-  },
-];
+  ];
+}
 
 /** Groups the flat benefit list into the two-up rows the desktop layout uses. */
 function inPairs<T>(items: T[]): T[][] {
@@ -141,7 +122,7 @@ function AudienceBlock({
   );
 }
 
-export function Audiences() {
+export function Audiences({ dict }: AudiencesProps) {
   return (
     // scroll-mt clears the sticky header when the nav jumps to this anchor
     // (header measures 90px on mobile, 93px on desktop).
@@ -150,7 +131,7 @@ export function Audiences() {
       className="scroll-mt-[90px] px-4 py-[50px] desk:scroll-mt-[93px] desk:px-8 desk:py-[100px]"
     >
       <div className="mx-auto flex w-full max-w-[420px] flex-col gap-16 desk:max-w-[1216px]">
-        {audiences.map((audience) => (
+        {buildAudiences(dict).map((audience) => (
           <AudienceBlock key={audience.heading} {...audience} />
         ))}
       </div>

@@ -1,26 +1,39 @@
 "use client";
 
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { useLocale } from "@/components/locale-provider";
 import { LanguageDialog } from "@/components/ui/language-dialog";
+import {
+  getLocale,
+  localePath,
+  stripLocale,
+  type Locale,
+  type LocaleSegment,
+} from "@/i18n/config";
+import type { Dictionary } from "@/i18n/dictionaries";
 import { cn } from "@/lib/cn";
-import type { Locale } from "@/lib/locales";
 
 type LanguageSelectorProps = {
+  lang: LocaleSegment;
+  dict: Dictionary["language"];
   /** "md" matches the desktop nav (16/24 label), "sm" the mobile nav (14/20). */
   size?: "sm" | "md";
   className?: string;
 };
 
-export function LanguageSelector({ size = "md", className }: LanguageSelectorProps) {
-  const { locale, setLocale } = useLocale();
+export function LanguageSelector({ lang, dict, size = "md", className }: LanguageSelectorProps) {
+  const router = useRouter();
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const locale = getLocale(lang);
 
+  // The locale lives in the URL, so switching is a navigation. Nothing is
+  // stored — returning later starts on the default English site again.
   const confirm = (next: Locale) => {
-    setLocale(next);
     setOpen(false);
+    router.push(localePath(next.segment, stripLocale(pathname)));
   };
 
   return (
@@ -29,7 +42,7 @@ export function LanguageSelector({ size = "md", className }: LanguageSelectorPro
         type="button"
         aria-haspopup="dialog"
         aria-expanded={open}
-        aria-label={`Change language — currently ${locale.label}`}
+        aria-label={dict.trigger.replace("{label}", locale.label)}
         onClick={() => setOpen(true)}
         className={cn(
           "flex flex-col items-start justify-center rounded-lg bg-white p-2 shadow-ds-sm",
@@ -78,6 +91,7 @@ export function LanguageSelector({ size = "md", className }: LanguageSelectorPro
       <LanguageDialog
         open={open}
         current={locale}
+        dict={dict}
         onClose={() => setOpen(false)}
         onConfirm={confirm}
       />

@@ -2,30 +2,9 @@ import Image from "next/image";
 
 import { FeatureCard } from "@/components/ui/feature-card";
 import { SectionPill } from "@/components/ui/section-pill";
+import type { Dictionary } from "@/i18n/dictionaries";
 
-type Feature = {
-  title: string;
-  description: string;
-};
-
-const features: Feature[] = [
-  {
-    title: "AI-Powered Personalization",
-    description: "No generic paths; every step is tailored to your journey",
-  },
-  {
-    title: "Verified Talent Pool",
-    description: "Work with real, skilled people backed by data and trust.",
-  },
-  {
-    title: "Goal Tracking",
-    description: "Stay accountable with smart tools that measure progress.",
-  },
-  {
-    title: "Global & Inclusive",
-    description: "Accessible in multiple languages and regions worldwide.",
-  },
-];
+type AboutProps = { dict: Dictionary["about"] };
 
 type PillarCardProps = {
   icon: { src: string; className: string };
@@ -61,7 +40,7 @@ function PillarCard({ icon, title, body, desktopBody }: PillarCardProps) {
   );
 }
 
-export function About() {
+export function About({ dict }: AboutProps) {
   return (
     // scroll-mt clears the sticky header when the nav jumps to this anchor
     // (header measures 90px on mobile, 93px on desktop).
@@ -85,7 +64,7 @@ export function About() {
             <div className="pointer-events-none absolute bottom-[-302px] left-[calc(50%+14.5px)] h-[607px] w-[310px] -translate-x-1/2 desk:bottom-[-383px] desk:left-1/2 desk:h-[891px] desk:w-[454px]">
               <Image
                 src="/assets/about-scene.png"
-                alt="The Cogrea app framed as a compass — the GPS for your career"
+                alt={dict.sceneAlt}
                 fill
                 sizes="(min-width: 1200px) 454px, 310px"
                 className="object-cover"
@@ -96,27 +75,20 @@ export function About() {
           <div className="order-1 flex flex-col gap-6 desk:order-2 desk:w-[592px] desk:gap-[49px]">
             <div className="flex flex-col gap-4">
               <div className="flex flex-col justify-center gap-6">
-                <SectionPill className="self-start">About Us</SectionPill>
-                <h2 className="type-h3-mobile text-black desk:type-h3-desktop">
-                  Revolutionizing Career Development
-                </h2>
+                <SectionPill className="self-start">{dict.pill}</SectionPill>
+                <h2 className="type-h3-mobile text-black desk:type-h3-desktop">{dict.heading}</h2>
               </div>
-              <p className="type-p-sm text-neutral-500 desk:type-p-md">
-                Cogrea is an emerging CareerTech company bridging learning, work, and business
-                growth. We combine the strengths of EdTech and HRTech but go further, delivering
-                continuous, personalized support across the entire career journey, from skill
-                development and job access to workforce growth and business success.
-              </p>
+              <p className="type-p-sm text-neutral-500 desk:type-p-md">{dict.body}</p>
             </div>
 
             <div className="flex flex-col gap-4 desk:items-end">
               <div className="flex w-full flex-col gap-8 desk:flex-row">
-                {features.slice(0, 2).map((feature) => (
+                {dict.features.slice(0, 2).map((feature) => (
                   <FeatureCard key={feature.title} {...feature} />
                 ))}
               </div>
               <div className="flex w-full flex-col gap-8 desk:flex-row">
-                {features.slice(2).map((feature) => (
+                {dict.features.slice(2).map((feature) => (
                   <FeatureCard key={feature.title} {...feature} />
                 ))}
               </div>
@@ -132,39 +104,18 @@ export function About() {
               // Figma: 24px frame, 21.5px glyph inset by 1.25px
               className: "absolute left-[1.25px] top-[1.25px] h-[21.5px] w-[21.5px] max-w-none",
             }}
-            title="Mission"
-            body={
-              "Our mission is to empower individuals and businesses across the globe with " +
-              "personalized career guidance, education, and mentorship, all powered by AI and " +
-              "supported through multilingual communities. Through actionable strategies and " +
-              "lifelong learning experiences, Cogrea is redefining how people grow, adapt, and " +
-              "succeed in today’s workforce."
-            }
-            desktopBody={
-              "A career navigation system built to empower individuals and businesses with " +
-              "personalized education, mentorship, career and business development tools. " +
-              "Through AI-driven innovation, and actionable strategies, Cogrea delivers lifelong " +
-              "learning experiences that unlock sustainable growth and measurable success"
-            }
+            title={dict.mission.title}
+            body={dict.mission.body}
+            desktopBody={dict.mission.bodyDesktop}
           />
           <PillarCard
             icon={{
               src: "/assets/icons/microscope.svg",
               className: "absolute inset-0 block size-6 max-w-none",
             }}
-            title="Vision"
-            body={
-              "To build a more productive, equitable, and sustainable global economy by " +
-              "unlocking human potential at scale. Cogrea reimagines how we learn, work, and " +
-              "grow together, democratizing access to opportunity, knowledge, growth and " +
-              "success for all."
-            }
-            desktopBody={
-              "To build a more productive, equitable, and sustainable global economy by " +
-              "unlocking human potential at scale. Cogrea reimagines how we learn, work, and " +
-              "grow together, democratizing access to opportunity, knowledge, growth and " +
-              "collaborative networks for all."
-            }
+            title={dict.vision.title}
+            body={dict.vision.body}
+            desktopBody={dict.vision.bodyDesktop}
           />
         </div>
       </div>

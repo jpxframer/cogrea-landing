@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 import { SectionPill } from "@/components/ui/section-pill";
+import type { Dictionary } from "@/i18n/dictionaries";
 import { cn } from "@/lib/cn";
 
 type Step = {
@@ -17,28 +18,14 @@ type Step = {
 const INSET_GLYPH = "absolute left-[1.25px] top-[1.25px] h-[21.5px] w-[21.5px] max-w-none";
 const FULL_GLYPH = "absolute inset-0 block size-6 max-w-none";
 
-const steps: Step[] = [
-  {
-    title: "Sign Up and Set Goals",
-    description: "Tell us where you are and where you want to go.",
-    icon: { src: "/assets/icons/paint-board.svg", className: INSET_GLYPH },
-  },
-  {
-    title: "Meet Your Assistant",
-    description: "Get real-time guidance customized for you.",
-    icon: { src: "/assets/icons/profile-2user.svg", className: FULL_GLYPH },
-  },
-  {
-    title: "Follow Personalized Pathways",
-    description: "Access curated courses, tools, and templates.",
-    icon: { src: "/assets/icons/profile-2user.svg", className: FULL_GLYPH },
-  },
-  {
-    title: "Join the Community",
-    description: "Learn, share, and grow with peers, mentors, and experts.",
-    icon: { src: "/assets/icons/chart-rose-dark.svg", className: INSET_GLYPH },
-  },
+const ICONS = [
+  { src: "/assets/icons/paint-board.svg", className: INSET_GLYPH },
+  { src: "/assets/icons/profile-2user.svg", className: FULL_GLYPH },
+  { src: "/assets/icons/profile-2user.svg", className: FULL_GLYPH },
+  { src: "/assets/icons/chart-rose-dark.svg", className: INSET_GLYPH },
 ];
+
+type HowItWorksProps = { dict: Dictionary["howItWorks"] };
 
 function StepButton({
   step,
@@ -81,8 +68,9 @@ function StepButton({
   );
 }
 
-export function HowItWorks() {
+export function HowItWorks({ dict }: HowItWorksProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const steps: Step[] = dict.steps.map((step, i) => ({ ...step, icon: ICONS[i] }));
   const active = steps[activeIndex];
 
   return (
@@ -95,10 +83,10 @@ export function HowItWorks() {
       <div className="mx-auto flex w-full max-w-[420px] flex-col gap-12 desk:max-w-[1216px]">
         {/* Figma left-aligns the header on mobile and centres it on desktop. */}
         <div className="flex w-full flex-col gap-6 desk:mx-auto desk:max-w-[800px] desk:items-center desk:text-center">
-          <SectionPill className="self-start desk:self-center">How it works</SectionPill>
+          <SectionPill className="self-start desk:self-center">{dict.pill}</SectionPill>
           <div className="flex w-full flex-col gap-4">
-            <h2 className="type-h3-desktop text-black">How It works</h2>
-            <p className="type-p-sm text-neutral-500">Simple. Personal. Effective.</p>
+            <h2 className="type-h3-desktop text-black">{dict.heading}</h2>
+            <p className="type-p-sm text-neutral-500">{dict.tagline}</p>
           </div>
         </div>
 
@@ -136,7 +124,7 @@ export function HowItWorks() {
                 <div className="pointer-events-none absolute bottom-[-197px] left-[calc(50%+5.5px)] h-[505px] w-[258px] -translate-x-1/2 desk:bottom-[-465px] desk:left-[calc(50%+4px)] desk:h-[891px] desk:w-[454px]">
                   <Image
                     src="/assets/about-scene.png"
-                    alt="The Cogrea app framed as a compass — the GPS for your career"
+                    alt={dict.sceneAlt}
                     fill
                     sizes="(min-width: 1200px) 454px, 258px"
                     className="object-cover"

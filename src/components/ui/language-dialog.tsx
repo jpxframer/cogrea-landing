@@ -4,12 +4,14 @@ import Image from "next/image";
 import { useEffect, useId, useRef, useState } from "react";
 
 import { CtaAction } from "@/components/ui/cta-button";
+import { locales, type Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/dictionaries";
 import { cn } from "@/lib/cn";
-import { locales, type Locale } from "@/lib/locales";
 
 type LanguageDialogProps = {
   open: boolean;
   current: Locale;
+  dict: Dictionary["language"];
   onClose: () => void;
   onConfirm: (locale: Locale) => void;
 };
@@ -52,7 +54,7 @@ function LocaleRow({
   );
 }
 
-export function LanguageDialog({ open, current, onClose, onConfirm }: LanguageDialogProps) {
+export function LanguageDialog({ open, current, dict, onClose, onConfirm }: LanguageDialogProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [pending, setPending] = useState<Locale>(current);
   const [query, setQuery] = useState("");
@@ -96,13 +98,13 @@ export function LanguageDialog({ open, current, onClose, onConfirm }: LanguageDi
           id={titleId}
           className="type-h2-mobile text-center text-black desk:type-h2-desktop"
         >
-          Select your language
+          {dict.title}
         </h2>
 
         <div className="flex flex-col gap-2">
           {/* Figma shows the current value beside the field label. */}
           <div className="flex items-center justify-between rounded-lg border border-solid border-grey-200 bg-white px-4 py-2 shadow-ds-md">
-            <span className="type-p-md">Language</span>
+            <span className="type-p-md">{dict.field}</span>
             <span className="type-p-md text-primary-500">{pending.label}</span>
           </div>
 
@@ -120,19 +122,19 @@ export function LanguageDialog({ open, current, onClose, onConfirm }: LanguageDi
                 type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search"
-                aria-label="Search languages"
+                placeholder={dict.search}
+                aria-label={dict.searchLabel}
                 className="type-p-sm w-full bg-transparent text-neutral-500 outline-none placeholder:text-neutral-500"
               />
             </label>
 
             <div
-              aria-label="Language"
+              aria-label={dict.field}
               className="flex max-h-[280px] flex-col gap-4 overflow-y-auto"
             >
               {selectedMatch.length > 0 && (
                 <div className="flex flex-col gap-2">
-                  <p className="type-p-md">Default</p>
+                  <p className="type-p-md">{dict.groupDefault}</p>
                   {selectedMatch.map((locale) => (
                     <LocaleRow
                       key={locale.code}
@@ -146,7 +148,7 @@ export function LanguageDialog({ open, current, onClose, onConfirm }: LanguageDi
 
               {otherMatches.length > 0 && (
                 <div className="flex flex-col gap-2">
-                  <p className="type-p-md">Other languages</p>
+                  <p className="type-p-md">{dict.groupOther}</p>
                   {otherMatches.map((locale) => (
                     <LocaleRow
                       key={locale.code}
@@ -159,7 +161,7 @@ export function LanguageDialog({ open, current, onClose, onConfirm }: LanguageDi
               )}
 
               {matches.length === 0 && (
-                <p className="type-p-sm px-4 py-2">No languages match “{query}”.</p>
+                <p className="type-p-sm px-4 py-2">{dict.noMatch.replace("{query}", query)}</p>
               )}
             </div>
           </div>
@@ -167,7 +169,7 @@ export function LanguageDialog({ open, current, onClose, onConfirm }: LanguageDi
 
         <div className="flex justify-end">
           <CtaAction contentClassName="px-6 py-2" onClick={() => onConfirm(pending)}>
-            Continue
+            {dict.confirm}
           </CtaAction>
         </div>
       </div>

@@ -6,17 +6,22 @@ import { useState } from "react";
 
 import { CtaButton } from "@/components/ui/cta-button";
 import { LanguageSelector } from "@/components/ui/language-selector";
+import { localePath, type LocaleSegment } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/dictionaries";
 
-// Root-relative so they still resolve from /legal/* and any future sub-route.
-const navLinks = [
-  { label: "About", href: "/#about" },
-  { label: "Features", href: "/#features" },
-  { label: "How It Works", href: "/#how-it-works" },
-  { label: "Get The App", href: "/#get-the-app" },
-];
+type SiteHeaderProps = { lang: LocaleSegment; dict: Dictionary };
 
-export function SiteHeader() {
+export function SiteHeader({ lang, dict }: SiteHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const home = localePath(lang);
+
+  // Root-relative so they resolve from /legal/* and any locale sub-route.
+  const navLinks = [
+    { label: dict.nav.about, href: `${home}#about` },
+    { label: dict.nav.features, href: `${home}#features` },
+    { label: dict.nav.howItWorks, href: `${home}#how-it-works` },
+    { label: dict.nav.getTheApp, href: `${home}#get-the-app` },
+  ];
 
   return (
     // Pinned to the top at every breakpoint so the page scrolls underneath it.
@@ -24,7 +29,7 @@ export function SiteHeader() {
       <div className="mx-auto flex w-full max-w-[1216px] items-center justify-between">
         {/* Logo + primary nav */}
         <div className="flex items-center gap-12">
-          <Link href="/" className="block h-[28px] w-[100px] shrink-0" aria-label="Cogrea home">
+          <Link href={home} className="block h-[28px] w-[100px] shrink-0" aria-label={dict.nav.home}>
             <Image
               src="/assets/cogrea-logo.svg"
               alt="Cogrea"
@@ -36,7 +41,7 @@ export function SiteHeader() {
             />
           </Link>
 
-          <nav aria-label="Main" className="hidden items-center justify-center gap-6 desk:flex">
+          <nav aria-label={dict.nav.main} className="hidden items-center justify-center gap-6 desk:flex">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -51,26 +56,34 @@ export function SiteHeader() {
 
         {/* Desktop utilities */}
         <div className="hidden items-center gap-6 desk:flex">
-          <LanguageSelector size="md" />
+          <LanguageSelector size="md" lang={lang} dict={dict.language} />
           <div className="flex items-center gap-6">
-            <CtaButton href="/sign-in" variant="secondary" contentClassName="px-8 py-2">
-              Sign In
+            <CtaButton
+              href={localePath(lang, "/sign-in")}
+              variant="secondary"
+              contentClassName="px-8 py-2"
+            >
+              {dict.nav.signIn}
             </CtaButton>
-            <CtaButton href="/get-started" variant="primary" contentClassName="px-6 py-2">
-              Get Started
+            <CtaButton
+              href={localePath(lang, "/get-started")}
+              variant="primary"
+              contentClassName="px-6 py-2"
+            >
+              {dict.nav.getStarted}
             </CtaButton>
           </div>
         </div>
 
         {/* Mobile utilities */}
         <div className="flex items-start gap-4 desk:hidden">
-          <LanguageSelector size="sm" />
+          <LanguageSelector size="sm" lang={lang} dict={dict.language} />
           <button
             type="button"
             onClick={() => setMenuOpen((open) => !open)}
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-label={menuOpen ? dict.nav.closeMenu : dict.nav.openMenu}
             className="flex items-center rounded-lg bg-primary-500 p-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
           >
             <Image
@@ -92,7 +105,7 @@ export function SiteHeader() {
           id="mobile-menu"
           className="absolute inset-x-0 top-full border-b border-solid border-neutral-200 bg-white px-4 pb-6 pt-6 shadow-ds-md desk:hidden"
         >
-          <nav aria-label="Main" className="flex flex-col gap-2">
+          <nav aria-label={dict.nav.main} className="flex flex-col gap-2">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -105,11 +118,19 @@ export function SiteHeader() {
             ))}
           </nav>
           <div className="mt-4 flex flex-col gap-4">
-            <CtaButton href="/sign-in" variant="secondary" contentClassName="px-8 py-3">
-              Sign In
+            <CtaButton
+              href={localePath(lang, "/sign-in")}
+              variant="secondary"
+              contentClassName="px-8 py-3"
+            >
+              {dict.nav.signIn}
             </CtaButton>
-            <CtaButton href="/get-started" variant="primary" contentClassName="px-8 py-3">
-              Get Started
+            <CtaButton
+              href={localePath(lang, "/get-started")}
+              variant="primary"
+              contentClassName="px-8 py-3"
+            >
+              {dict.nav.getStarted}
             </CtaButton>
           </div>
         </div>

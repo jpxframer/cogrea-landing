@@ -2,34 +2,44 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { StoreBadges } from "@/components/ui/store-badges";
+import { localePath, type LocaleSegment } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/dictionaries";
 
-const linkColumns = [
-  {
-    title: "Menu",
-    links: [
-      { label: "How It Works", href: "/#how-it-works" },
-      { label: "Who We Help", href: "/#audiences" },
-      { label: "Features", href: "/#features" },
-    ],
-  },
-  {
-    title: "Legal",
-    links: [
-      { label: "Terms of Service", href: "/legal/terms" },
-      { label: "Privacy Policy", href: "/legal/privacy" },
-      { label: "Contact Us", href: "/contact" },
-    ],
-  },
-];
+type SiteFooterProps = {
+  lang: LocaleSegment;
+  dict: Dictionary["footer"];
+  badges: Dictionary["storeBadges"];
+};
 
-export function SiteFooter() {
+export function SiteFooter({ lang, dict, badges }: SiteFooterProps) {
+  const home = localePath(lang);
+
+  const linkColumns = [
+    {
+      title: dict.menu,
+      links: [
+        { label: dict.howItWorks, href: `${home}#how-it-works` },
+        { label: dict.whoWeHelp, href: `${home}#audiences` },
+        { label: dict.features, href: `${home}#features` },
+      ],
+    },
+    {
+      title: dict.legal,
+      links: [
+        { label: dict.terms, href: localePath(lang, "/legal/terms") },
+        { label: dict.privacy, href: localePath(lang, "/legal/privacy") },
+        { label: dict.contact, href: localePath(lang, "/contact") },
+      ],
+    },
+  ];
+
   return (
     <footer className="px-4 py-[50px] desk:px-8 desk:py-[100px]">
       <div className="mx-auto flex w-full max-w-[420px] flex-col gap-6 desk:max-w-[1216px]">
         <div className="flex flex-col gap-12 border-b border-solid border-neutral-300 pb-12 desk:flex-row desk:items-center desk:justify-between desk:gap-8">
           <div className="flex flex-col gap-5 desk:w-[592px]">
             <div className="flex flex-col gap-4">
-              <Link href="/" className="block h-[28px] w-[100px]" aria-label="Cogrea home">
+              <Link href={home} className="block h-[28px] w-[100px]" aria-label="Cogrea">
                 <Image
                   src="/assets/cogrea-logo.svg"
                   alt="Cogrea"
@@ -39,14 +49,12 @@ export function SiteFooter() {
                   className="block h-full w-full"
                 />
               </Link>
-              <p className="type-p-lg w-full text-neutral-500">
-                Your Career. Your Growth. Your Future. Guided by Experts. Powered by AI
-              </p>
+              <p className="type-p-lg w-full text-neutral-500">{dict.tagline}</p>
             </div>
-            <StoreBadges />
+            <StoreBadges dict={badges} />
           </div>
 
-          <nav aria-label="Footer" className="flex items-start gap-[14px]">
+          <nav aria-label={dict.nav} className="flex items-start gap-[14px]">
             {linkColumns.map((column) => (
               <div key={column.title} className="flex flex-col gap-1">
                 {/* Figma indents these headings with two leading spaces to line
