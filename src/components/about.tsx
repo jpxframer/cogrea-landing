@@ -96,7 +96,7 @@ export function About() {
           <div className="order-1 flex flex-col gap-6 desk:order-2 desk:w-[592px] desk:gap-[49px]">
             <div className="flex flex-col gap-4">
               <div className="flex flex-col justify-center gap-6">
-                <SectionPill>About Us</SectionPill>
+                <SectionPill className="self-start">About Us</SectionPill>
                 <h2 className="type-h3-mobile text-black desk:type-h3-desktop">
                   Revolutionizing Career Development
                 </h2>

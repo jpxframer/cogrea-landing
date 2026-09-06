@@ -70,8 +70,7 @@ export function Features() {
       <div className="mx-auto flex w-full max-w-[420px] flex-col gap-6 desk:max-w-[1216px] desk:gap-12">
         {/* Figma left-aligns the header on mobile and centres it on desktop. */}
         <div className="flex w-full flex-col gap-6 desk:mx-auto desk:max-w-[800px] desk:items-center desk:text-center">
-          {/* SectionPill is self-start by default; desktop centres this header. */}
-          <SectionPill className="desk:self-center">Features</SectionPill>
+          <SectionPill className="self-start desk:self-center">Features</SectionPill>
           <h2 className="type-h3-mobile w-full text-black desk:type-h3-desktop">
             Everything You Need to Succeed
           </h2>

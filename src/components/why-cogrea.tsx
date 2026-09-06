@@ -35,7 +35,7 @@ export function WhyCogrea() {
     >
       <div className="mx-auto flex w-full max-w-[420px] flex-col gap-8 desk:max-w-[1216px] desk:flex-row desk:items-start">
         <div className="flex flex-col gap-6 desk:min-w-0 desk:flex-1">
-          <SectionPill>Why Cogrea?</SectionPill>
+          <SectionPill className="self-start">Why Cogrea?</SectionPill>
           <div className="flex flex-col gap-4">
             <h2 className="type-h3-mobile text-black desk:type-h3-desktop">Why Choose Cogrea</h2>
             <p className="type-p-xs text-neutral-500 desk:type-p-sm">

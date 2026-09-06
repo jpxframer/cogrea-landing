@@ -107,7 +107,9 @@ function AudienceBlock({
     >
       <div className="flex flex-col gap-[29px] desk:min-w-0 desk:flex-1">
         <div className="flex flex-col gap-6">
-          <SectionPill icon={pill.icon}>{pill.label}</SectionPill>
+          <SectionPill icon={pill.icon} className="self-start">
+            {pill.label}
+          </SectionPill>
           <div className="flex flex-col gap-4">
             <h2 className="type-h3-mobile text-black desk:type-h3-desktop">{heading}</h2>
             <p className="type-p-sm text-neutral-500">{intro}</p>

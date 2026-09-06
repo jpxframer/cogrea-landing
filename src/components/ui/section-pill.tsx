@@ -18,7 +18,9 @@ export function SectionPill({
   return (
     <div
       className={cn(
-        "flex flex-col items-start self-start rounded-[99px] bg-white px-6 py-2 shadow-ds-md",
+        // No align-self here: cn() cannot merge, so a baked-in value would beat
+        // whatever a caller passes. Callers set their own alignment.
+        "flex flex-col items-start rounded-[99px] bg-white px-6 py-2 shadow-ds-md",
         className,
       )}
     >
