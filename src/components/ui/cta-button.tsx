@@ -25,12 +25,48 @@ const variantStyles: Record<
   },
 };
 
-type CtaButtonProps = ComponentPropsWithoutRef<typeof Link> & {
+type CtaSharedProps = {
   variant?: CtaVariant;
   /** Padding utilities for the inner label surface — varies per placement in the design. */
   contentClassName?: string;
 };
 
+function shellClasses(variant: CtaVariant, className?: string) {
+  return cn(
+    "flex flex-col items-start rounded-lg p-[2px] shadow-ds-md",
+    "transition-opacity hover:opacity-90",
+    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500",
+    variantStyles[variant].shell,
+    className,
+  );
+}
+
+function CtaSurface({
+  variant,
+  contentClassName,
+  children,
+}: Required<CtaSharedProps> & { children: React.ReactNode }) {
+  const styles = variantStyles[variant];
+  return (
+    <span className={cn("relative flex w-full items-center justify-center rounded-lg", contentClassName)}>
+      <span
+        aria-hidden
+        className={cn("pointer-events-none absolute inset-0 rounded-lg", styles.gradient)}
+      />
+      <span className={cn("relative type-body-bold text-center whitespace-nowrap", styles.label)}>
+        {children}
+      </span>
+      <span
+        aria-hidden
+        className={cn("pointer-events-none absolute inset-0 rounded-[inherit]", styles.inset)}
+      />
+    </span>
+  );
+}
+
+type CtaButtonProps = ComponentPropsWithoutRef<typeof Link> & CtaSharedProps;
+
+/** A CTA that navigates. */
 export function CtaButton({
   variant = "primary",
   className,
@@ -38,37 +74,31 @@ export function CtaButton({
   children,
   ...props
 }: CtaButtonProps) {
-  const styles = variantStyles[variant];
-
   return (
-    <Link
-      className={cn(
-        "flex flex-col items-start rounded-lg p-[2px] shadow-ds-md",
-        "transition-opacity hover:opacity-90",
-        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500",
-        styles.shell,
-        className,
-      )}
-      {...props}
-    >
-      <span
-        className={cn(
-          "relative flex w-full items-center justify-center rounded-lg",
-          contentClassName,
-        )}
-      >
-        <span
-          aria-hidden
-          className={cn("pointer-events-none absolute inset-0 rounded-lg", styles.gradient)}
-        />
-        <span className={cn("relative type-body-bold text-center whitespace-nowrap", styles.label)}>
-          {children}
-        </span>
-        <span
-          aria-hidden
-          className={cn("pointer-events-none absolute inset-0 rounded-[inherit]", styles.inset)}
-        />
-      </span>
+    <Link className={shellClasses(variant, className)} {...props}>
+      <CtaSurface variant={variant} contentClassName={contentClassName}>
+        {children}
+      </CtaSurface>
     </Link>
+  );
+}
+
+type CtaActionProps = ComponentPropsWithoutRef<"button"> & CtaSharedProps;
+
+/** The same CTA shell as a real button, for in-page actions. */
+export function CtaAction({
+  variant = "primary",
+  className,
+  contentClassName = "px-8 py-3",
+  children,
+  type = "button",
+  ...props
+}: CtaActionProps) {
+  return (
+    <button type={type} className={shellClasses(variant, className)} {...props}>
+      <CtaSurface variant={variant} contentClassName={contentClassName}>
+        {children}
+      </CtaSurface>
+    </button>
   );
 }
