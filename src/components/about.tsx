@@ -3,17 +3,13 @@ import Image from "next/image";
 import { SectionPill } from "@/components/ui/section-pill";
 
 type Feature = {
-  /** Shown at every width unless `desktopTitle` overrides it from `desk` up. */
   title: string;
-  desktopTitle?: string;
   description: string;
 };
 
-// The two breakpoints label the first and last cards differently in Figma.
 const features: Feature[] = [
   {
     title: "AI-Powered Personalization",
-    desktopTitle: "Predictive skill gap analyzer",
     description: "No generic paths; every step is tailored to your journey",
   },
   {
@@ -26,12 +22,11 @@ const features: Feature[] = [
   },
   {
     title: "Global & Inclusive",
-    desktopTitle: "Career Pathway Engine",
     description: "Accessible in multiple languages and regions worldwide.",
   },
 ];
 
-function FeatureCard({ title, desktopTitle, description }: Feature) {
+function FeatureCard({ title, description }: Feature) {
   return (
     <div className="flex w-full min-w-0 flex-1 flex-col items-start rounded-2xl bg-neutral-50 px-4 py-2 shadow-ds-sm">
       <div className="flex w-full flex-col gap-2">
@@ -46,16 +41,7 @@ function FeatureCard({ title, desktopTitle, description }: Feature) {
           />
         </span>
         <div className="flex w-full flex-col gap-2">
-          <p className="type-p-md-medium w-full text-neutral-900">
-            {desktopTitle ? (
-              <>
-                <span className="desk:hidden">{title}</span>
-                <span className="hidden desk:inline">{desktopTitle}</span>
-              </>
-            ) : (
-              title
-            )}
-          </p>
+          <p className="type-p-md-medium w-full text-neutral-900">{title}</p>
           <p className="type-p-xs w-full text-neutral-500">{description}</p>
         </div>
       </div>
