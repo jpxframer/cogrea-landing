@@ -95,6 +95,16 @@ Personalized Pathways".
    `profile-2user` (two people). Community would suit the people glyph better.
    Implemented as designed.
 
+### Gotcha hit
+
+- **`SectionPill` hardcodes `self-start`**, which beats a parent's
+  `items-center` — the desktop How It Works pill sat at the left edge of the
+  800px header box instead of centred. `cn()` is a plain joiner with no
+  tailwind-merge, so the fix is to pass a variant that wins in the cascade:
+  `<SectionPill className="desk:self-center">`. Any future centred header needs
+  the same. Left-aligned callers (About, Audiences) rely on the `self-start`
+  default because their parents are `items-stretch`.
+
 ### Notes
 
 - The nav's `#how-it-works` link now resolves. `#about` and `#features` also
