@@ -5,7 +5,7 @@ project back up. Project conventions live in [README.md](README.md).
 
 ---
 
-## Where things stand — 2026-09-06 11:40 WAT
+## Where things stand — 2026-09-06 12:35 WAT
 
 **Repo:** https://github.com/jpxframer/cogrea-landing (public, branch `main`).
 Pushed and in sync through "Add the Audiences section"; all commits authored by
@@ -53,6 +53,70 @@ anchors now resolve.**
 **Housekeeping:** local dev server stopped, ports 3000 and 3100 free.
 `TaskStop` does not kill the Node process — kill the PID from
 `netstat -ano | grep :3000` as well.
+
+---
+
+## 2026-09-06 12:35 WAT
+
+**Done: the language picker works (Figma `18740:1539` / `18740:2024`).**
+
+The user asked for six locales only: English (US), French, German, Spanish,
+Italian, Arabic. **Two decisions were put to them and both were answered:**
+1. Scope — the picker remembers the choice and sets `lang`/`dir`; **copy stays
+   English** until translated copy exists. NOT a full i18n build.
+2. Structure — **a single list of six locales**, not the design's two-column
+   Country + Language picker.
+
+New files: `src/lib/locales.ts`, `src/components/locale-provider.tsx`,
+`src/components/ui/language-dialog.tsx`. `language-selector.tsx` rewritten as a
+client component that opens the dialog. `layout.tsx` wraps children in
+`LocaleProvider`.
+
+### Things worth remembering
+
+- **State uses `useSyncExternalStore`, not `useState` + `useEffect`.** The
+  project's eslint runs the React Compiler rules and **rejects calling setState
+  synchronously inside an effect** (`react-hooks/set-state-in-effect`). The
+  external-store hook is the right primitive for reading localStorage after
+  hydration, and it gives cross-tab sync via the `storage` event for free.
+  Server snapshot returns the default so hydration matches.
+- The dialog is a **native `<dialog>`** with `showModal()` — focus trap, Esc and
+  inert background come free. Backdrop styled with Tailwind's `backdrop:`
+  variant. Selection is provisional; **Continue** commits, Esc/backdrop cancels.
+- `CtaButton` was split: `CtaButton` (renders a Link) and **`CtaAction`**
+  (renders a real `<button>`) sharing one visual shell. Use `CtaAction` for
+  in-page actions rather than a Link with `preventDefault`.
+- **`SiteHeader` renders TWO `LanguageSelector`s** (desktop + mobile), so there
+  are two `<dialog>` elements on the page. Only the visible one is reachable,
+  since the other's ancestor is `display:none`. Scope any test selector with
+  `:visible` / `dialog[open]` or it hits a strict-mode violation.
+
+### Assets
+
+The Figma flag component is an **external library** — `search_design_system`
+finds nothing and the file lists only one page, so its variants cannot be
+enumerated. It only exposes US, AD, AE, AF, AU. FR/DE/ES/IT/SA were taken from
+**flag-icons (MIT, Copyright (c) 2013 Panayiotis Lipiridis)** via unpkg;
+attribution is in README. Spain uses the three-band **civil flag** because the
+arms version is 91KB (16.5KB gzipped) and invisible at 24x18. The search icon
+came from Figma. General internet access works from this machine (unpkg and the
+npm registry both returned 200).
+
+Verified in the browser end to end: dialog 512x584 desktop / 343x620 mobile,
+24px radius, 36px vs 32px title, all six rows with correct grouping and pressed
+state, focus trapped inside, search filters and shows an empty state, picking
+Arabic + Continue sets `lang="ar-SA"`, `dir="rtl"`, nav "SA | AR" and persists;
+survives reload AND a route change to /legal/terms; **Esc after picking German
+correctly leaves Arabic in place**.
+
+### Flagged to the user
+
+- **RTL with English copy reads oddly** (trailing punctuation jumps, e.g.
+  ".ecosystem"). That is correct RTL behaviour for LTR text and resolves when
+  Arabic copy lands. Offered to gate `dir` until then.
+- Flags for languages is a known anti-pattern (a flag is a country, not a
+  language — Arabic is not Saudi-only, Spanish is not Spain-only). Implemented
+  as designed since Figma uses flags and the nav reads "US | EN".
 
 ---
 

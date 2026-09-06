@@ -29,6 +29,32 @@ Figma file (`P36EvMfoHaBqid0zogZ2ZN`).
 Both wrap `SiteHeader`, `LegalDocument`, `GetStarted` and `SiteFooter`. Their
 copy lives in the page files; `legal-document.tsx` only handles layout.
 
+## Language picker
+
+The nav's language control opens a modal (Figma `18740:1539` / `18740:2024`)
+listing six locales: English (US), French, German, Spanish, Italian, Arabic.
+
+- Locales are defined once in [`src/lib/locales.ts`](src/lib/locales.ts).
+- `locale-provider.tsx` reads and writes `localStorage` through
+  `useSyncExternalStore`, so the choice survives reloads and route changes and
+  stays in step across tabs. It also mirrors the choice onto `<html lang>` and
+  `<html dir>`, so **Arabic flips the whole page to RTL**.
+- The dialog is a native `<dialog>`, which supplies the focus trap, Esc
+  handling and inert background. Picking a row is provisional; **Continue**
+  commits it, Esc or a backdrop click discards it.
+- **Nothing is translated yet.** All copy stays English whatever is selected —
+  the wiring is in place for translations to drop in later. Arabic is where
+  this shows most: the layout mirrors correctly but the English text inside it
+  reads oddly until Arabic copy exists.
+
+## Third-party assets
+
+The French, German, Spanish, Italian and Saudi flags come from
+[flag-icons](https://github.com/lipis/flag-icons) (MIT) — Copyright (c) 2013
+Panayiotis Lipiridis. The Figma flag component only exposes US, AD, AE, AF and
+AU, so the rest were sourced rather than redrawn. Spain uses the three-band
+civil flag: the arms version is 91KB and invisible at 24x18.
+
 ### Anchors
 
 **Section links are root-relative** (`/#about`, not `#about`) because the header
@@ -143,6 +169,9 @@ frames draw it identically, differing only in title size, which is the optional
   the App Store badge from its natural 120px to 134px. They use
   `object-contain` instead so the trademarked artwork keeps its aspect ratio.
 - Store badge links point at placeholder routes; the apps are not published.
+- The Figma language modal has **two** columns, Country and Language. It is
+  built as a single list of six locales instead, which is what was asked for.
+  The mobile frame omits the Language column altogether.
 - The legal pages' bullet and numbered lists are real `<ul>`/`<ol>` elements
   with hanging indents. Figma draws them flat, as literal "•" and "(1)"
   characters inside one text node. The "(n)" numbering is preserved with a
@@ -151,8 +180,8 @@ frames draw it identically, differing only in title size, which is the optional
   desktop frame's Privacy-specific intro is used at both widths.
 - The desktop legal body is a 1216px measure at 18px, which is a very long line
   (~150 characters). Implemented as designed, but worth revisiting.
-- The language selector renders as a button with no dropdown — it needs real
-  i18n wiring.
+- The language selector opens and remembers a choice, but no copy is
+  translated yet. See "Language picker" above.
 - All CTA/nav destinations are placeholder routes.
 
 ## Next.js 16 notes
