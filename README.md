@@ -11,6 +11,7 @@ Figma file (`P36EvMfoHaBqid0zogZ2ZN`).
 | Hero      | `18728:23017` | `18728:23412` |
 | About     | `18728:23029` | `18728:23424` |
 | Audiences | `18728:23092` | `18728:23487` |
+| How It Works | `18728:23186` | `18728:23581` |
 
 Remaining landing-page sections and the other four screens are not built yet.
 
@@ -25,8 +26,10 @@ Tokens live in [`src/app/globals.css`](src/app/globals.css) under Tailwind v4's
 - **Gradients** — `bg-gradient-accent` (Gradient 1, the warm tile on the
   "For Individuals" benefit icons), `bg-gradient-brand` (Gradient 2, the blue
   tile on Mission/Vision and the "for Businesses" benefit icons)
-- **Type styles** — `.type-h1-desktop`, `.type-h2-mobile`, `.type-p-md`,
-  `.type-p-md-medium`, `.type-p-sm`, `.type-p-sm-medium`, `.type-body-bold`
+- **Type styles** — `.type-h1-desktop`, `.type-h2-desktop`, `.type-h2-mobile`,
+  `.type-h3-desktop`, `.type-h3-mobile`, `.type-h5-desktop`, `.type-h5-mobile`,
+  `.type-p-lg-medium`, `.type-p-md`, `.type-p-md-medium`, `.type-p-sm`,
+  `.type-p-sm-medium`, `.type-p-xs`, `.type-body-bold`
 
 ### Breakpoint
 
@@ -58,6 +61,12 @@ single `hero-wordmark.svg` is scaled per breakpoint.
 the desktop and mobile frames share the same source photo and only differ in
 crop, which `object-cover` handles.
 
+How It Works adds no new imagery: its phone render is byte-identical to
+`about-scene.png` and its wordmark to `hero-wordmark.svg`. It does add
+`icons/chart-rose-dark.svg` — the same glyph as `icons/chart-rose.svg` but
+stroked `#111827` instead of `#F5F8FF`. Icons render through `next/image`, so a
+recolour needs its own file rather than `currentColor`.
+
 ## Not in the designs
 
 - The mobile hamburger has no open state in Figma. A minimal expanding panel
@@ -70,6 +79,13 @@ crop, which `object-cover` handles.
 - The "for Businesses" intro paragraph is individual-focused in both Figma
   frames ("Whether you're just starting out, switching paths...") and is
   implemented as designed.
+- **The How It Works stepper is interactive.** Figma only shows step 1 active;
+  clicking any step swaps the preview panel. Without this the highlighted step
+  would be a dead control.
+- How It Works step order differs per breakpoint in Figma; the mobile order is
+  used. Its preview panel also differs — desktop shows only the step
+  description as a 36px heading, mobile shows title + description. The mobile
+  treatment is used at both widths. See [memory.md](memory.md).
 - The language selector renders as a button with no dropdown — it needs real
   i18n wiring.
 - All CTA/nav destinations are placeholder routes.

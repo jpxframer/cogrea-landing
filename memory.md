@@ -5,7 +5,7 @@ project back up. Project conventions live in [README.md](README.md).
 
 ---
 
-## Where things stand — 2026-09-06 08:05 WAT
+## Where things stand — 2026-09-06 08:30 WAT
 
 **Repo:** https://github.com/jpxframer/cogrea-landing (public, branch `main`).
 Pushed and in sync through "Add the Audiences section"; all commits authored by
@@ -28,17 +28,79 @@ never shared, so ask for it if you need to check the deployed build.
 | Hero | `18728:23017` | `18728:23412` |
 | About | `18728:23029` | `18728:23424` |
 | Audiences | `18728:23092` | `18728:23487` |
+| How It Works | `18728:23186` | `18728:23581` |
 
 **Next up:** the remaining landing-page sections, then the other 4 screens —
 `18728-10408`, `18728-10519`, `18728-10623`, `18728-10735`.
 Full landing frames: desktop `18728-22990`, mobile `18728-23394`.
 
-**Waiting on the user:** confirm the Audiences copy calls (see the 2026-09-06
-08:05 entry) and whether `#features` is the right anchor for that section.
+**Waiting on the user:** confirm the Audiences copy calls (2026-09-06 08:05
+entry), the How It Works copy calls (2026-09-06 08:30 entry), and whether
+`#features` is the right anchor for Audiences.
 
 **Housekeeping:** local dev server stopped, ports 3000 and 3100 free.
 `TaskStop` does not kill the Node process — kill the PID from
 `netstat -ano | grep :3000` as well.
+
+---
+
+## 2026-09-06 08:30 WAT
+
+**Done: the How It Works section (desktop `18728:23186`, mobile `18728:23581`).**
+
+Added `src/components/how-it-works.tsx` and wired it into `src/app/page.tsx`
+after `<Audiences />`. Pill + centred heading (left-aligned on mobile) over a
+white card holding four step items beside a preview panel.
+
+**It is a client component** — the steps are buttons and clicking one swaps the
+preview title/description. Figma only draws step 1 active; a highlighted step
+that did nothing would be a dead control. Steps use `aria-current="step"`;
+native buttons cover keyboard use without ARIA tab plumbing.
+
+New tokens: `type-h2-desktop` (36/44, -0.72) and `type-p-lg-medium` (18/28).
+
+**Asset reuse — nothing new but icons.** Verified by md5:
+- the preview phone render is byte-identical to `about-scene.png`
+- the preview wordmark is byte-identical to `hero-wordmark.svg`
+
+New icons: `paint-board.svg`, `profile-2user.svg`, `chart-rose-dark.svg`. The
+last is the **same geometry** as the existing `chart-rose.svg`, differing only
+in stroke colour (`#111827` here vs `#F5F8FF` on About's gradient tile). Icons
+render through `next/image`, so a recolour cannot use `currentColor` and needs
+its own file. Two icon geometries recur, already established in `about.tsx`:
+`paint-board`/`chart-rose` are a 21.5px glyph inset 1.25px in a 24px box;
+`profile-2user` fills the 24px box.
+
+Verified: `tsc --noEmit`, `eslint`, `next build` pass; rendered at 1440 and 375
+and measured with `getComputedStyle` (48px outer gap, header centred at 800 on
+desktop / left-aligned on mobile, card p-24 vs py-16/px-0, 488px step column,
+40x40 r4 tiles, 18/28 step titles, 36/44 and 28/36 preview headings, hero panel
+600x427 and 311x351, wordmark 564x158 and 272x76, phone 454x891 and 258x505).
+Also asserted the click behaviour: step 3 swaps the preview to "Follow
+Personalized Pathways".
+
+### Design discrepancies (flagged to the user, NOT implemented as designed)
+
+1. **The step order differs between breakpoints.** Desktop runs Sign Up / Meet
+   Your Assistant / Join the Community / Follow Personalized Pathways; mobile
+   swaps the last two. The mobile order is used at both widths — it reads as
+   the more logical progression.
+2. **The preview panel differs.** Desktop shows only the step *description* as
+   a 36px heading with no title; mobile shows the title as a 28px heading with
+   the description below. The mobile treatment is used at both widths, sized
+   responsively.
+3. Not a conflict but worth raising: the icon mapping looks wrong in Figma.
+   "Join the Community" gets `chart-rose` (a pie-chart glyph) while
+   "Follow Personalized Pathways" and "Meet Your Assistant" **share**
+   `profile-2user` (two people). Community would suit the people glyph better.
+   Implemented as designed.
+
+### Notes
+
+- The nav's `#how-it-works` link now resolves. `#about` and `#features` also
+  resolve; only `#get-the-app` is still dead.
+- Figma copy had stray leading spaces (" Simple. Personal. Effective.",
+  " Learn, share, and grow...") — stripped.
 
 ---
 

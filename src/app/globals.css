@@ -45,6 +45,14 @@
   letter-spacing: -0.8px;
 }
 
+/* Heading/H2/Medium/Desktop */
+@utility type-h2-desktop {
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 44px;
+  letter-spacing: -0.72px;
+}
+
 /* Heading/H2/Medium/Mobile */
 @utility type-h2-mobile {
   font-weight: 500;
@@ -83,6 +91,13 @@
   font-size: 20px;
   line-height: 28px;
   letter-spacing: -0.4px;
+}
+
+/* Paragraph/Large/Medium */
+@utility type-p-lg-medium {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 28px;
 }
 
 /* Paragraph/Medium/Regular */
