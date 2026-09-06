@@ -5,10 +5,10 @@ project back up. Project conventions live in [README.md](README.md).
 
 ---
 
-## Where things stand — 2026-09-05 23:30 WAT (end of session)
+## Where things stand — 2026-09-06 08:05 WAT
 
 **Repo:** https://github.com/jpxframer/cogrea-landing (public, branch `main`).
-Clean and in sync at `f31851a`. Three commits, all authored by `jpxframer`.
+Last synced at `41e117d`; all commits authored by `jpxframer`.
 
 > The user asked that no AI attribution appear anywhere near this repo. Do NOT
 > add `Co-Authored-By`, "Generated with", or similar to commits or PRs.
@@ -25,17 +25,116 @@ never shared, so ask for it if you need to check the deployed build.
 | Nav | `18728:22992` | `18728:23398` |
 | Hero | `18728:23017` | `18728:23412` |
 | About | `18728:23029` | `18728:23424` |
+| Audiences | `18728:23092` | `18728:23487` |
 
 **Next up:** the remaining landing-page sections, then the other 4 screens —
 `18728-10408`, `18728-10519`, `18728-10623`, `18728-10735`.
 Full landing frames: desktop `18728-22990`, mobile `18728-23394`.
 
-**Waiting on the user:** which feature-card titles are canonical (see the
-2026-09-05 23:20 entry). Everything else below is optional/offered work.
+**Waiting on the user:** confirm the Audiences copy calls (see the 2026-09-06
+08:05 entry) and whether `#features` is the right anchor for that section.
 
 **Housekeeping:** local dev server stopped, ports 3000 and 3100 free.
 `TaskStop` does not kill the Node process — kill the PID from
 `netstat -ano | grep :3000` as well.
+
+---
+
+## 2026-09-06 08:05 WAT
+
+**Done: the Audiences section (desktop `18728:23092`, mobile `18728:23487`).**
+
+Added `src/components/audiences.tsx` — two mirrored blocks ("For Individuals",
+"for Businesses"), each a pill + H3 + intro + a 3x2 benefit-card grid beside a
+photo. Desktop puts the photo right of the copy for block 1 and left for
+block 2 (`desk:flex-row-reverse`); mobile stacks copy then photo. Wired into
+`src/app/page.tsx` after `<About />`.
+
+`SectionPill` gained an optional `icon` prop (defaults to the Cogrea mark) —
+this section needs `profile` and `briefcase` glyphs instead.
+
+New token: `bg-gradient-accent` (Figma Gradient 1, the warm purple->yellow tile
+on the Individuals icons). The Businesses tile reuses the existing
+`bg-gradient-brand` — Gradient 2 is byte-for-byte the same gradient already
+added for Mission/Vision, so don't add a second copy.
+
+New assets: `individuals-scene.jpg`, `businesses-scene.jpg`,
+`icons/profile.svg`, `icons/briefcase.svg`, `icons/medal-star.svg`.
+**Both photos are byte-identical between the desktop and mobile frames**
+(verified by md5), so there is one file each and `object-cover` handles the
+different crops. The icon exports were clean this time — no ancestor chrome —
+only empty `opacity="0"` placeholder groups, which were stripped.
+
+Anchor: the section is `id="features"` because it sits directly after About and
+the nav's second link is `#features`. **This is a guess** — if a later section
+turns out to be the real Features block, rename this one.
+
+Verified: `tsc --noEmit`, `eslint`, `next build` all pass; rendered at 1440 and
+375 and measured with `getComputedStyle` against the Figma spec (section
+padding, 17px row / 16px column gaps, 288x80 and 343x80 cards, 40x40 tiles,
+24x24 icons, 592x463 and 343x250 media, H3 32/40 and 28/36).
+
+### Design discrepancies (flagged to the user, NOT implemented as designed)
+
+Unlike the About section, these were unified rather than shipped per-breakpoint:
+
+1. **The mobile "for Businesses" block repeats the Individuals benefit list
+   verbatim** — a copy-paste artifact in Figma. The desktop business list
+   (Hire verified talent / Track and grow your workforce / Retain top
+   performers / HR + business support / All-in-one platform / Operations
+   guidance) is used at both widths.
+2. Two Individuals benefits differ by breakpoint. Mobile wording was used:
+   - "24/7 Expert Assistant & career coach" (desk) -> "24/7 AI + human career coach"
+   - "Only pay for Courses you need" (desk) -> "Only pay for what you need"
+3. Not a breakpoint conflict, but flagged: the "for Businesses" intro paragraph
+   is individual-focused in BOTH frames. Implemented as designed.
+
+### Deviations from Figma
+
+- Desktop block 1 is 595 + 32 + 589 in Figma and block 2 is 592 + 32 + 592.
+  Both are implemented as a symmetric 592/592 split, so block 1's cards are
+  288px rather than 289.5px. The 3px asymmetry looks unintentional.
+
+### Gotchas hit
+
+- `next/image`'s `priority` prop is **deprecated in Next 16** in favour of
+  `preload` (`node_modules/next/dist/docs/01-app/03-api-reference/02-components/image.md`).
+  Switched the two existing uses in `hero.tsx` and `site-header.tsx`.
+- No Playwright browsers are cached, but Chrome is installed. Use
+  `playwright-core` (no browser download) with `chromium.launch({ channel: "chrome" })`
+  from the scratchpad.
+- `page.goto(..., { waitUntil: "networkidle" })` never settles against
+  `next start` — use `"domcontentloaded"`. And do NOT await an
+  `img.onload` promise for lazy images that are still off-screen; it hangs
+  forever. Scroll the section through the viewport, then wait a fixed beat.
+
+---
+
+## 2026-09-06 07:46 WAT
+
+**Resolved: the About feature-card titles now match at both breakpoints.**
+
+The user chose the mobile set as canonical, so cards 1 and 4 read
+"AI-Powered Personalization" and "Global & Inclusive" at every width. The
+desktop-only alternatives ("Predictive skill gap analyzer" / "Career Pathway
+Engine") are gone — they did not describe the copy underneath them, and the
+mobile names share the benefit-led voice of the two cards that were already
+identical across breakpoints.
+
+This deletes the `desktopTitle` field from `Feature` and the responsive-span
+branch in `FeatureCard`; `about.tsx` now diverges by breakpoint only in the
+Mission/Vision body copy. **The landing page no longer matches Figma here** —
+the desktop frame `18728:23029` still shows the old titles, so re-syncing that
+section from Figma will reintroduce them.
+
+Verified: `tsc --noEmit` and `eslint` pass.
+
+### Gotcha hit
+
+- **There is no `python` on this machine** (the Windows Store alias shim
+  intercepts it and exits). Use `node - <<'JS'` for scripted file edits; it
+  sidesteps the heredoc-apostrophe problem noted below without needing the
+  Write tool.
 
 ---
 

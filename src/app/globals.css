@@ -130,7 +130,18 @@
   font-feature-settings: "case" 1;
 }
 
-/* Figma: Gradient/Gradient 2 — the blue tile behind the Mission/Vision icons */
+/* Figma: Gradient/Gradient 1 — the warm tile behind the "For Individuals" icons */
+@utility bg-gradient-accent {
+  background-image: linear-gradient(
+    -80.514deg,
+    rgb(182, 15, 237) 4.831%,
+    rgb(234, 67, 53) 28.284%,
+    rgb(255, 106, 43) 62.161%,
+    rgb(251, 188, 5) 95.169%
+  );
+}
+
+/* Figma: Gradient/Gradient 2 — the Mission/Vision and "for Businesses" icon tiles */
 @utility bg-gradient-brand {
   background-image: linear-gradient(
     180deg,

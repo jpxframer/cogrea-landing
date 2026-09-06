@@ -7,10 +7,12 @@ Figma file (`P36EvMfoHaBqid0zogZ2ZN`).
 
 | Section | Desktop node | Mobile node |
 | --- | --- | --- |
-| Nav   | `18728:22992` | `18728:23398` |
-| Hero  | `18728:23017` | `18728:23412` |
+| Nav       | `18728:22992` | `18728:23398` |
+| Hero      | `18728:23017` | `18728:23412` |
+| About     | `18728:23029` | `18728:23424` |
+| Audiences | `18728:23092` | `18728:23487` |
 
-Remaining landing-page sections and the other five screens are not built yet.
+Remaining landing-page sections and the other four screens are not built yet.
 
 ## Design system
 
@@ -20,6 +22,9 @@ Tokens live in [`src/app/globals.css`](src/app/globals.css) under Tailwind v4's
 - **Colors** — `primary-500 #1B2353`, `primary-100 #F5F8FF`,
   `secondary-500 #FF6A2B`, `neutral-100/200/500/700`, `grey-200 #EAECF0`
 - **Effects** — `shadow-ds-sm` (Drop shadow/Small), `shadow-ds-md` (Drop shadow/Medium)
+- **Gradients** — `bg-gradient-accent` (Gradient 1, the warm tile on the
+  "For Individuals" benefit icons), `bg-gradient-brand` (Gradient 2, the blue
+  tile on Mission/Vision and the "for Businesses" benefit icons)
 - **Type styles** — `.type-h1-desktop`, `.type-h2-mobile`, `.type-p-md`,
   `.type-p-md-medium`, `.type-p-sm`, `.type-p-sm-medium`, `.type-body-bold`
 
@@ -49,13 +54,30 @@ chevron and phone render are byte-identical across both breakpoints; only the
 hero wordmark was exported at two sizes (same artwork, uniform scale), so a
 single `hero-wordmark.svg` is scaled per breakpoint.
 
+`individuals-scene.jpg` and `businesses-scene.jpg` are likewise one file each —
+the desktop and mobile frames share the same source photo and only differ in
+crop, which `object-cover` handles.
+
 ## Not in the designs
 
 - The mobile hamburger has no open state in Figma. A minimal expanding panel
   with the nav links and both CTAs is included so the button works.
+- **Audiences copy is unified across breakpoints.** The Figma frames disagree:
+  the mobile "for Businesses" block repeats the Individuals benefit list
+  verbatim, so the desktop business list is used at both widths. Two individual
+  benefits also differ by breakpoint; the mobile wording is used. See
+  [memory.md](memory.md) for the full list.
+- The "for Businesses" intro paragraph is individual-focused in both Figma
+  frames ("Whether you're just starting out, switching paths...") and is
+  implemented as designed.
 - The language selector renders as a button with no dropdown — it needs real
   i18n wiring.
 - All CTA/nav destinations are placeholder routes.
+
+## Next.js 16 notes
+
+- `next/image`'s `priority` prop is deprecated in favour of `preload`. The
+  header and hero use `preload`.
 
 ## Scripts
 

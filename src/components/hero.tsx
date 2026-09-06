@@ -49,7 +49,7 @@ export function Hero() {
               src="/assets/hero-scene.png"
               alt="The Cogrea app showing a member's career points, milestones and community feed"
               fill
-              priority
+              preload
               sizes="(min-width: 1200px) 555px, 329px"
               className="object-cover"
             />

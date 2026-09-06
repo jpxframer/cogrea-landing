@@ -29,7 +29,7 @@ export function SiteHeader() {
               alt="Cogrea"
               width={100}
               height={28}
-              priority
+              preload
               unoptimized
               className="block h-full w-full"
             />
