@@ -14,14 +14,14 @@ Figma file (`P36EvMfoHaBqid0zogZ2ZN`).
 | How It Works | `18728:23186` | `18728:23581` |
 | Why Choose Cogrea | `18728:23234` | `18728:23630` |
 | Features | `18728:23278` | `18728:23674` |
+| Get Started | `18728:23336` | `18728:23732` |
 
 Remaining landing-page sections and the other four screens are not built yet.
 
 ### Anchors
 
-`#about`, `#features` and `#how-it-works` resolve; `#get-the-app` is still
-dead because that section is not built. Audiences is `#audiences` — it has no
-nav link. Every section with an `id` needs `scroll-mt-[90px] desk:scroll-mt-[93px]`
+All four nav anchors resolve: `#about`, `#features`, `#how-it-works` and
+`#get-the-app`. Audiences is `#audiences` — it has no nav link. Every section with an `id` needs `scroll-mt-[90px] desk:scroll-mt-[93px]`
 so the anchor clears the sticky header.
 
 ## Design system
@@ -78,6 +78,13 @@ recolour needs its own file rather than `currentColor`.
 
 ## Shared components
 
+`ui/section-pill.tsx` sets **no** `align-self`. It used to hardcode
+`self-start`, which silently beat anything a caller passed — [`cn()`](src/lib/cn.ts)
+is a plain joiner with no tailwind-merge, so equal-specificity utilities are
+resolved by stylesheet order, not argument order. Every caller now states its
+own alignment (`self-start`, `self-start desk:self-center`, or nothing when the
+parent already centres).
+
 `ui/feature-card.tsx` is the pale card with a Cogrea-mark tile above a title and
 description. About, Why Choose Cogrea and Features all use it — the three Figma
 frames draw it identically, differing only in title size, which is the optional
@@ -108,6 +115,10 @@ frames draw it identically, differing only in title size, which is the optional
   both widths.
 - Features card 1 has an 18px title where the other five are 20px. Both Figma
   frames agree, so it is implemented as designed.
+- The store badges are laid out as two equal-width slots, which would stretch
+  the App Store badge from its natural 120px to 134px. They use
+  `object-contain` instead so the trademarked artwork keeps its aspect ratio.
+- Store badge links point at placeholder routes; the apps are not published.
 - The language selector renders as a button with no dropdown — it needs real
   i18n wiring.
 - All CTA/nav destinations are placeholder routes.

@@ -5,7 +5,7 @@ project back up. Project conventions live in [README.md](README.md).
 
 ---
 
-## Where things stand — 2026-09-06 09:15 WAT
+## Where things stand — 2026-09-06 10:05 WAT
 
 **Repo:** https://github.com/jpxframer/cogrea-landing (public, branch `main`).
 Pushed and in sync through "Add the Audiences section"; all commits authored by
@@ -31,17 +31,70 @@ never shared, so ask for it if you need to check the deployed build.
 | How It Works | `18728:23186` | `18728:23581` |
 | Why Choose Cogrea | `18728:23234` | `18728:23630` |
 | Features | `18728:23278` | `18728:23674` |
+| Get Started | `18728:23336` | `18728:23732` |
 
 **Next up:** the remaining landing-page sections, then the other 4 screens —
 `18728-10408`, `18728-10519`, `18728-10623`, `18728-10735`.
 Full landing frames: desktop `18728-22990`, mobile `18728-23394`.
 
 **Waiting on the user:** confirm the copy calls in the 08:05, 08:30 and 09:15
-entries. The `#features` anchor question is settled — see 09:15.
+entries. The `#features` anchor question is settled — see 09:15. **All four nav
+anchors now resolve.**
 
 **Housekeeping:** local dev server stopped, ports 3000 and 3100 free.
 `TaskStop` does not kill the Node process — kill the PID from
 `netstat -ano | grep :3000` as well.
+
+---
+
+## 2026-09-06 10:05 WAT
+
+**Done: the Get Started / download section (`18728:23336` / `18728:23732`).**
+
+Added `src/components/get-started.tsx`, wired in after `<Features />`. Centred
+pill and heading over two halves: a laptop render card plus a card with the
+two audience CTAs, beside a phone panel carrying the store badges.
+`id="get-the-app"` — **the last dead nav link now resolves.**
+
+A local `Panel` helper wraps the three white hairline-bordered cards
+(`border-neutral-100`, `rounded-2xl`, `shadow-ds-md`) since all three share it.
+
+**Asset reuse.** Verified by md5: the phone render is byte-identical to
+`about-scene.png` — **the third section to reuse it** (About, How It Works,
+Get Started). Desktop and mobile exports were identical for every asset here.
+New: `get-started-app.png` (laptop render), `badge-google-play.svg` (135x40),
+`badge-app-store.svg` (120x40). No new type tokens — everything already existed.
+
+Verified: `tsc --noEmit`, `eslint`, `next build` pass; measured at 1440 and 375
+(48/24px wrap gap, 800px centred header on desktop, h2 36/44 and 32/40, panels
+p-16 r16 with a 1px #F3F4F6 border, laptop card inner 557x376 matching the
+2746/1856 aspect, CTA row 16px gap going row->column, phone panel 593x580 and
+343x580, overlay centred at both widths, 481x944 render, 6px badge gap).
+
+### Bug caught by measuring — `SectionPill` alignment (now fixed properly)
+
+The 08:30 entry recorded that `SectionPill` hardcoded `self-start` and that the
+workaround was `desk:self-center`. That workaround only worked **because
+variants sort after plain utilities**. Passing a plain `self-center` here did
+nothing and the pill rendered 326px left of centre.
+
+**`SectionPill` no longer sets any `align-self`.** Callers state their own:
+- `self-start` — About, Audiences, Why Cogrea (parents are `items-stretch`)
+- `self-start desk:self-center` — How It Works, Features
+- nothing — Get Started, whose header is `items-center` at every width
+
+Asserted every pill in the browser afterwards, not just the new one. General
+lesson: **`cn()` cannot merge Tailwind classes**, so a shared component must not
+bake in a property a caller may need to override — expose it or omit it.
+
+### Deviation from Figma
+
+- Figma gives the two store badges equal-width flex slots, which stretches the
+  App Store badge from its natural 120px to 134px. Implemented with
+  `object-contain` so the trademarked artwork is not distorted. The slots are
+  still equal width.
+- Badge links point at placeholder routes (`/download/google-play`,
+  `/download/app-store`) — the apps are not published.
 
 ---
 
